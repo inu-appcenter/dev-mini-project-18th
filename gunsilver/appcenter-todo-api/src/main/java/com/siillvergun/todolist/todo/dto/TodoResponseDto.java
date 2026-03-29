@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoResponseDto {
+    private Long id;
     private String content;
     private LocalDate due_date;
     private String category;
