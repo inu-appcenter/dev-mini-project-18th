@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class TodoResponseDto {
     private Long id;
     private String content;
-    private LocalDate due_date;
+    private LocalDate dueDate;
     private String category;
     private Boolean completed;
 }

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class TodoRequestDto {
     private String content;
-    private LocalDate due_date;
+    private LocalDate dueDate;
     private String category;
     private Boolean completed;
 }
