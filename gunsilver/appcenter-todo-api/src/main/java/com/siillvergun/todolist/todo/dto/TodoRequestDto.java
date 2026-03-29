@@ -16,4 +16,5 @@ public class TodoRequestDto {
     private String content;
     private LocalDate due_date;
     private String category;
+    private Boolean completed;
 }
