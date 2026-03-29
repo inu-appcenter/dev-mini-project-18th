@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -12,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class TodoRequestDto {
     private Long id;
     private String content;
+    private LocalDate due_date;
     private String category;
 }

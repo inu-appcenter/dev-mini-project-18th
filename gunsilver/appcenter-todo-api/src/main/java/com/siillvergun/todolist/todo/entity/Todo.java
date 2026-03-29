@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -18,6 +20,9 @@ public class Todo extends Base {
 
     @Column(length = 200, name = "content", nullable = false)
     private String content;
+
+    @Column(name = "due_date",nullable = false)
+    private LocalDate due_date;
 
     @Column(length = 20, name = "category", nullable = false)
     private String category;
