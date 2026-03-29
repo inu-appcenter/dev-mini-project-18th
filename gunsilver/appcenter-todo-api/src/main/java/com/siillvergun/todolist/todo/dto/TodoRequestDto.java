@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoCreateRequestDto {
+public class TodoRequestDto {
     private String content;
     private LocalDate due_date;
     private String category;

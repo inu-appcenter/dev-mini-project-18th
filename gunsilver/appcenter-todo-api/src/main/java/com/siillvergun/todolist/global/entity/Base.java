@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Base {
     @CreatedDate
-    @Column(name = "createdAt", updatable = false, nullable = false)
-    protected LocalDateTime created_at;
+    @Column(name = "created_at", updatable = false, nullable = false)
+    protected LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updatedAt", nullable = false)
-    protected LocalDateTime updated_at;
-    protected Boolean is_deleted;
+    @Column(name = "updated_at", nullable = false)
+    protected LocalDateTime updatedAt;
+    protected Boolean isDeleted;
 }
