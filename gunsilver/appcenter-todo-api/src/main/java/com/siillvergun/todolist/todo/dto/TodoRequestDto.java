@@ -11,11 +11,9 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoRequestDto {
+public class TodoCreateRequestDto {
     private String content;
     private LocalDate due_date;
     private String category;
     private Boolean completed;
-
-
 }

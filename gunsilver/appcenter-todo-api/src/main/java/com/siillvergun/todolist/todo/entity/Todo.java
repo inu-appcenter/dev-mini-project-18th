@@ -20,7 +20,7 @@ public class Todo extends Base {
     @Column(length = 200, name = "content", nullable = false)
     private String content;
 
-    @Column(name = "dueDate",nullable = false)
+    @Column(name = "dueDate", nullable = false)
     private LocalDate due_date;
 
     @Column(name = "completed", nullable = false)
@@ -28,4 +28,5 @@ public class Todo extends Base {
 
     @Column(length = 20, name = "category", nullable = false)
     private String category;
+
 }
