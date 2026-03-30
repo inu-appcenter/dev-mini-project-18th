@@ -25,6 +25,6 @@ public class Base {
     @Column(name = "updated_at", nullable = false)
     protected LocalDateTime updatedAt;
 
-    @Column(name = "is_deleted", nullable = false)
-    protected Boolean isDeleted;
+    // @Column(name = "is_deleted", nullable = false)
+    // protected Boolean isDeleted = false;
 }

@@ -3,6 +3,7 @@ package com.siillvergun.todolist.todo.entity;
 import com.siillvergun.todolist.global.entity.Base;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,12 @@ public class Todo extends Base {
 
     @Column(length = 20, name = "category", nullable = false)
     private String category;
+
+    @Builder
+    public Todo(String content, LocalDate dueDate, Boolean completed, String category) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.completed = completed;
+        this.category = category;
+    }
 }
