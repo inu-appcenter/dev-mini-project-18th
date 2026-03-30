@@ -18,12 +18,12 @@ public class TodoRequestDto {
     private String category;
     private Boolean completed;
 
-    public Todo toEntity(){
+    public Todo toEntity() {
         return Todo.builder()
                 .content(this.content)
                 .dueDate(this.dueDate)
                 .category(this.category)
-                .completed(this.completed)
+                .completed(false)
                 .build();
     }
 }

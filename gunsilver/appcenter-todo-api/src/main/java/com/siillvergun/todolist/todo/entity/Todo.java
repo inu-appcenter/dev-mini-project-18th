@@ -31,10 +31,10 @@ public class Todo extends Base {
     private String category;
 
     @Builder
-    public Todo(String content, LocalDate dueDate, Boolean completed, String category){
-        this.content=content;
-        this.dueDate=dueDate;
-        this.completed=completed;
-        this.category=category;
+    public Todo(String content, LocalDate dueDate, Boolean completed, String category) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.completed = completed;
+        this.category = category;
     }
 }
