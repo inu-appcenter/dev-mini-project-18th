@@ -1,5 +1,6 @@
 package com.siillvergun.todolist.todo.dto;
 
+import com.siillvergun.todolist.todo.entity.Todo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,4 +18,14 @@ public class TodoResponseDto {
     private LocalDate dueDate;
     private String category;
     private Boolean completed;
+
+    public static TodoResponseDto from(Todo todo){
+        return TodoResponseDto.builder()
+                .id(todo.getId())
+                .content(todo.getContent())
+                .dueDate(todo.getDueDate())
+                .category(todo.getCategory())
+                .completed(todo.isCompleted())
+                .build();
+    }
 }
