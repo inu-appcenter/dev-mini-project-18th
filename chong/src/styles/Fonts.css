@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-Bold.otf") format("opentype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-ExtraBold.otf") format("opentype");
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-Heavy.otf") format("opentype");
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-Light.otf") format("opentype");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-Medium.otf") format("opentype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-Regular.otf") format("opentype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "suite";
+    src: url("../assets/fonts/SUITE-otf/SUITE-SemiBold.otf") format("opentype");
+    font-weight: 600;
+}
