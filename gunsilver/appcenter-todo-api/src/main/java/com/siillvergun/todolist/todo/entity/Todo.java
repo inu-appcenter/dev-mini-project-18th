@@ -25,7 +25,7 @@ public class Todo extends Base {
     private LocalDate dueDate;
 
     @Column(name = "completed", nullable = false)
-    private boolean completed;
+    private boolean completed = false;
 
     @Column(length = 20, name = "category", nullable = false)
     private String category;

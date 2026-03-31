@@ -22,6 +22,7 @@ public class TodoService {
         return TodoResponseDto.from(todoRepository.save(todo));
     }
 
+    @Transactional(readOnly = true)
     public List<TodoResponseDto> getAllTodo() {
         List<Todo> todos = todoRepository.findAll();
         return todos.stream().map(TodoResponseDto::from).toList();
@@ -32,6 +33,7 @@ public class TodoService {
                 .orElseThrow(() -> new NoSuchElementException("Todo not found"));
     }
 
+    @Transactional
     public void deleteTodo(Long id) {
         Todo todo = findTodoById(id);
         todoRepository.delete(todo);
