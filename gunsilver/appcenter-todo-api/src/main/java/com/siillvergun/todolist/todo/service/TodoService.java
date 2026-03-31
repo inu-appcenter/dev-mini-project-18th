@@ -8,14 +8,34 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 public class TodoService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public TodoResponseDto createTodo(TodoRequestDto todoRequestDto){
+    public TodoResponseDto createTodo(TodoRequestDto todoRequestDto) {
         Todo todo = todoRequestDto.toEntity();
         return TodoResponseDto.from(todoRepository.save(todo));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TodoResponseDto> getAllTodo() {
+        List<Todo> todos = todoRepository.findAll();
+        return todos.stream().map(TodoResponseDto::from).toList();
+    }
+
+    private Todo findTodoById(Long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Todo not found"));
+    }
+
+    @Transactional
+    public void deleteTodo(Long id) {
+        Todo todo = findTodoById(id);
+        todoRepository.delete(todo);
     }
 }
