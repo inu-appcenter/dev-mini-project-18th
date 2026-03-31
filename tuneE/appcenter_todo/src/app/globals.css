@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@font-face {
+  font-family: "SUITE";
+  src: url("../../public/fonts/SUITE-Variable.woff2") format("woff2");
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-suite: var(--font-suite);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* 유틸리티 클래스 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE, 엣지 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "SUITE", Arial, Helvetica, sans-serif;
+}
