@@ -29,4 +29,10 @@ public class TodoController {
         List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo();
         return ResponseEntity.ok(todoResponseDtoList);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        todoService.deleteTodo(id);
+        return ResponseEntity.noContent().build();
+    }
 }
