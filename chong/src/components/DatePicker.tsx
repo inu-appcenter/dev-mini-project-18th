@@ -2,6 +2,7 @@
 import {
   ButtonProps,
   DivProps,
+  SvgProps,
   TableProps,
   TdProps,
   TheadProps,
@@ -22,6 +23,9 @@ import CalenderIcon from "@images/Calender.svg";
 export interface DatePickerProps extends Omit<DivProps, "defaultValue" | "onChange"> {
   ControlProps?: DivProps;
   ShowerProps?: DivProps;
+  ArrowBackIconProps?: SvgProps;
+  CalenderIconProps?: SvgProps;
+  ArrowForwardIconProps?: SvgProps;
   TrgProps?: ButtonProps;
   PositionerProps?: DivProps;
   TableProps?: TableProps;
@@ -39,6 +43,9 @@ export interface DatePickerProps extends Omit<DivProps, "defaultValue" | "onChan
 export function DatePicker({
   ControlProps,
   ShowerProps,
+  ArrowBackIconProps,
+  CalenderIconProps,
+  ArrowForwardIconProps,
   TrgProps,
   PositionerProps,
   TableProps,
@@ -202,7 +209,7 @@ export function DatePicker({
               else setValue((v) => v.subtract(5, "day"));
             }}
           >
-            <ArrowBackIcon />
+            <ArrowBackIcon {...ArrowBackIconProps} />
           </Btn>
 
           <div
@@ -217,7 +224,7 @@ export function DatePicker({
                 else hide();
               }}
             >
-              <CalenderIcon />
+              <CalenderIcon {...CalenderIconProps} />
             </Btn>
             {`${Value.format("MM월 DD일")} ${KorDateAry[Value.day()]}요일`}
           </div>
@@ -230,7 +237,7 @@ export function DatePicker({
               else setValue((v) => v.add(5, "day"));
             }}
           >
-            <ArrowForwardIcon />
+            <ArrowForwardIcon {...ArrowForwardIconProps} />
           </Btn>
         </div>
       </div>
