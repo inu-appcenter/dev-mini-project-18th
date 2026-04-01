@@ -24,7 +24,8 @@
       "@utils/*": ["./src/utils/*"],
       "@compoents/*": ["./src/compoents/*"],
       "@images/*": ["./src/assets/images/*"],
-      "@fonts/*": ["./src/assets/fonts/*"]
+      "@fonts/*": ["./src/assets/fonts/*"],
+      "@store/*": ["./src/store/*"]
     }
   },
   "include": [
