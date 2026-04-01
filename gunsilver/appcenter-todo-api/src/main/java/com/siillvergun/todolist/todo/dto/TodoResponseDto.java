@@ -1,5 +1,6 @@
 package com.siillvergun.todolist.todo.dto;
 
+import com.siillvergun.todolist.todo.entity.Category;
 import com.siillvergun.todolist.todo.entity.Todo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class TodoResponseDto {
     private Long id;
     private String content;
     private LocalDate dueDate;
-    private String category;
+    private Category category;
     private boolean completed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -27,11 +27,12 @@ public class Todo extends Base {
     @Column(name = "completed", nullable = false)
     private boolean completed = false;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "category", nullable = false)
-    private String category;
+    private Category category;
 
     @Builder
-    public Todo(String content, LocalDate dueDate, boolean completed, String category) {
+    public Todo(String content, LocalDate dueDate, boolean completed, Category category) {
         this.content = content;
         this.dueDate = dueDate;
         this.completed = completed;
