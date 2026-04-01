@@ -5,8 +5,9 @@ export type DivProps = ComponentProps<"div">;
 export type ButtonProps = ComponentProps<"button">;
 export type InputProps = ComponentProps<"input">;
 export interface SvgProps {
-    width?: string;
-    height?: string;
+    width?: number | `${number}`;
+    height?: number | `${number}`;
+    fill?: string;
 }
 
 export type TableProps = ComponentProps<"table">;
