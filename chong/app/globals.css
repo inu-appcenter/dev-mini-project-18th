@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import "../src/styles/Fonts.css";
+
+:root {
+  --background: #fdfdfd;
+  --text-primary: #171717;
+  --text-secondary: #8b8b8b;
+  --brand-color: #7975e6;
+  --stroke-primary: #d9d9d9;
+  --suite: "suite", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --important-task-color: #d65a5e;
+  --metting-task-color: #8eca89;
+  --study-task-color: #f7e096;
+}
+
+@theme inline {
+  --bg-color: var(--background);
+  --text-primary: var(--text-primary);
+  --text-secondary: var(--text-secondary);
+  --brand-color: var(--brand-color);
+  --stroke-primary: var(--stroke-primary);
+  --suite: var(--suite);
+  --important-task-color: var(--important-task-color);
+  --metting-task-color: var(--metting-task-color);
+  --study-task-color: var(--study-task-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --text-primary: #ededed;
+  }
+}
+
+html, body {
+  background: var(--background);
+  color: var(--text-primary);
+  min-height: 100%;
+  max-height: 100%;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  font-family: var(--suite);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} 
+
+@layer components {
+  .Main {
+    @apply max-w-full min-w-full w-full min-h-full max-h-full h-full z-1 
+    border-2 border-(--stroke-primary)
+    rounded-md
+    sm:max-w-[30vw] sm:min-w-[30vw] sm:w-[30vw];
+  }
+}
+
+
+:is(html, body, :root, #app, .Main):has(
+	div:is([data-scope="date-picker"][data-part="positioner"])
+) {
+	overflow-y: hidden !important;
+}
