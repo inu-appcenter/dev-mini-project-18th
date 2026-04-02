@@ -24,7 +24,7 @@ public class TodoService {
 
     @Transactional(readOnly = true)
     public List<TodoResponseDto> getAllTodo() {
-        List<Todo> todos = todoRepository.findAll();
+        List<Todo> todos = todoRepository.findAll(); // 페이지네이션으로 리펙토링
         return todos.stream().map(TodoResponseDto::from).toList();
     }
 

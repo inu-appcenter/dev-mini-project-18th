@@ -24,6 +24,7 @@ public class Todo extends Base {
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
 
+    // boolean 기본값은 false, 명시적으로 써준 것
     @Column(name = "completed", nullable = false)
     private boolean completed = false;
 

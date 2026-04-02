@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 public class TodoRequestDto {
+
     private String content;
     private LocalDate dueDate;
     private Category category;
@@ -19,7 +20,6 @@ public class TodoRequestDto {
                 .content(this.content)
                 .dueDate(this.dueDate)
                 .category(this.category)
-                .completed(false)
                 .build();
     }
 }
