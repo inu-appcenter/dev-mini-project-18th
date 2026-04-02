@@ -2,6 +2,7 @@ package com.siillvergun.todolist.todo.service;
 
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
+import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import com.siillvergun.todolist.todo.entity.Todo;
 import com.siillvergun.todolist.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,22 @@ public class TodoService {
 
     @Transactional(readOnly = true)
     public List<TodoResponseDto> getAllTodo() {
-        List<Todo> todos = todoRepository.findAll();
+        List<Todo> todos = todoRepository.findAll(); // 페이지네이션으로 리펙토링
         return todos.stream().map(TodoResponseDto::from).toList();
     }
 
     private Todo findTodoById(Long id) {
         return todoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Todo not found"));
+    }
+
+    @Transactional
+    public TodoResponseDto updateTodo(Long id, TodoUpdateRequestDto requestDto) {
+        Todo todo = findTodoById(id);
+
+        todo.changeTodo(requestDto.getContent(), requestDto.getDueDate(), requestDto.getCategory(), requestDto.isCompleted());
+
+        return TodoResponseDto.from(todo);
     }
 
     @Transactional

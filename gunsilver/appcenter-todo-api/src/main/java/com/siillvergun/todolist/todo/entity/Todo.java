@@ -24,17 +24,26 @@ public class Todo extends Base {
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
 
+    // boolean 기본값은 false, 명시적으로 써준 것
     @Column(name = "completed", nullable = false)
     private boolean completed = false;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "category", nullable = false)
-    private String category;
+    private Category category;
 
     @Builder
-    public Todo(String content, LocalDate dueDate, Boolean completed, String category) {
+    public Todo(String content, LocalDate dueDate, boolean completed, Category category) {
         this.content = content;
         this.dueDate = dueDate;
         this.completed = completed;
         this.category = category;
+    }
+
+    public void changeTodo(String content, LocalDate dueDate, Category category, boolean completed) {
+        this.content = content;
+        this.dueDate = dueDate;
+        this.category = category;
+        this.completed = completed;
     }
 }
