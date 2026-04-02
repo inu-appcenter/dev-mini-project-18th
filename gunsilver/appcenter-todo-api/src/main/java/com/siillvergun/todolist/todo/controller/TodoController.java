@@ -2,6 +2,7 @@ package com.siillvergun.todolist.todo.controller;
 
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
+import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import com.siillvergun.todolist.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,15 @@ public class TodoController {
     public ResponseEntity<List<TodoResponseDto>> getAllTodo() {
         List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo();
         return ResponseEntity.ok(todoResponseDtoList);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TodoResponseDto> updateTodo(
+            @PathVariable Long id,
+            @RequestBody TodoUpdateRequestDto todoUpdateRequestDto
+    ) {
+        TodoResponseDto todoResponseDto = todoService.updateTodo(id, todoUpdateRequestDto);
+        return ResponseEntity.ok(todoResponseDto);
     }
 
     @DeleteMapping("/{id}")
