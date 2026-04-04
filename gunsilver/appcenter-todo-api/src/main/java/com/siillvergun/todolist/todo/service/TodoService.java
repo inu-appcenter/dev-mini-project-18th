@@ -1,5 +1,7 @@
 package com.siillvergun.todolist.todo.service;
 
+import com.siillvergun.todolist.global.error.CustomError;
+import com.siillvergun.todolist.global.error.ErrorCode;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
 import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class TodoService {
 
     private Todo findTodoById(Long id) {
         return todoRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Todo not found"));
+                .orElseThrow(() -> new CustomError(ErrorCode.TODO_NOT_FOUND));
     }
 
     @Transactional
