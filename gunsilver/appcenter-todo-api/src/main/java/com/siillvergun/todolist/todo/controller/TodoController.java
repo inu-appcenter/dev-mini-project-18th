@@ -4,6 +4,7 @@ import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
 import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import com.siillvergun.todolist.todo.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<TodoResponseDto> createTodo(
-            @RequestBody TodoRequestDto todoRequestDto
+            @RequestBody @Valid TodoRequestDto todoRequestDto
     ) {
         TodoResponseDto todoResponseDto = todoService.createTodo(todoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(todoResponseDto);
@@ -34,7 +35,7 @@ public class TodoController {
     @PatchMapping("/{id}")
     public ResponseEntity<TodoResponseDto> updateTodo(
             @PathVariable Long id,
-            @RequestBody TodoUpdateRequestDto todoUpdateRequestDto
+            @RequestBody @Valid TodoUpdateRequestDto todoUpdateRequestDto
     ) {
         TodoResponseDto todoResponseDto = todoService.updateTodo(id, todoUpdateRequestDto);
         return ResponseEntity.ok(todoResponseDto);
