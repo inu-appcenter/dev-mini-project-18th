@@ -1,6 +1,6 @@
-package com.siillvergun.todolist.global.error;
+package com.siillvergun.todolist.global.exception;
 
-import com.siillvergun.todolist.global.error.dto.ErrorResponseDto;
+import com.siillvergun.todolist.global.exception.dto.ErrorResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

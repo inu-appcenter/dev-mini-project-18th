@@ -1,7 +1,7 @@
 package com.siillvergun.todolist.todo.service;
 
-import com.siillvergun.todolist.global.error.CustomError;
-import com.siillvergun.todolist.global.error.ErrorCode;
+import com.siillvergun.todolist.global.exception.CustomError;
+import com.siillvergun.todolist.global.exception.ErrorCode;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
 import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
