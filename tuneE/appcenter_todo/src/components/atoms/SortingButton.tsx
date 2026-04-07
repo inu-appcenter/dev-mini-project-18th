@@ -1,5 +1,4 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { color } from "@/types/color";
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface SortingButtonProps {
   isUpperSorted?: boolean;
@@ -11,15 +10,17 @@ const SortingButton = ({
   handleSorting,
 }: SortingButtonProps) => {
   return (
-    <div className="flex justify-end w-full">
-      <button
-        className="flex items-center right-4 text-sm mr-6"
-        style={{ color: color["text-secondary"] }}
-        onClick={handleSorting}
-      >
-        생성순
-        {isUpperSorted ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </button>
+    <div className="relative flex h-19 w-full justify-end pr-3">
+      <div className="border-stroke-primary flex items-center border-l border-dashed">
+        {/* ml-[290px] = ml-72.5 */}
+        <button
+          className="text-text-secondary font-SemiBold bg-bg-primary right-4 mr-6 ml-72.5 flex items-center text-sm"
+          onClick={handleSorting}
+        >
+          생성순
+          {isUpperSorted ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
+      </div>
     </div>
   );
 };
