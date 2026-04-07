@@ -3,13 +3,14 @@ import HeaderLayout from '@/components/templates/HeaderLayout';
 import MainLayout from '@/components/templates/MainLayout';
 import AddTodoButton from '@/components/atoms/AddButton';
 import { useState, useEffect } from 'react';
-import { Todo, useSetTodos } from '@/store/useTodoStore';
+import { TodoInterface, useSetTodos } from '@/store/useTodoStore';
 
 type HomeClientProps = {
-  Todos: Todo[];
+  Todos: TodoInterface[];
 };
 
 const HomeClient = ({ Todos }: HomeClientProps) => {
+  // 스크롤 상태는 해당 컴포넌트에서만 사용하므로 굳이 전역적으로 다루지 않음
   const [isScrolled, setIsScrolled] = useState(false);
   const setTodos = useSetTodos();
 

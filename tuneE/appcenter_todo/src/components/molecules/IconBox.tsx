@@ -1,5 +1,5 @@
 'use client';
-import { Square, SquarePen, X } from 'lucide-react';
+import { CheckSquare, Square, SquarePen, X } from 'lucide-react';
 import { useSetTodos } from '@/store/useTodoStore';
 import Link from 'next/link';
 import {
@@ -10,11 +10,22 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+
 interface IconBoxProps {
   id: number;
+  content: string;
+  dueDate: string;
+  category: 'IMPORTANT' | 'MEETING' | 'STUDY';
+  completed: boolean;
 }
 
-const IconBox = ({ id }: IconBoxProps) => {
+const IconBox = ({
+  id,
+  content,
+  dueDate,
+  category,
+  completed,
+}: IconBoxProps) => {
   const setTodos = useSetTodos();
   // Delete 메서드 요청 보내는 로직
   const handleDelete = async () => {
@@ -24,7 +35,7 @@ const IconBox = ({ id }: IconBoxProps) => {
         method: 'DELETE',
       });
       if (deleteResponse.ok) {
-        console.log(`${id}번 데이터 삭제 완료!`);
+        console.log(`${id}번 Todo 삭제 완료!`);
         // 삭제 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
         const getResponse = await fetch('/todos');
         const updatedTodos = await getResponse.json();
@@ -40,11 +51,51 @@ const IconBox = ({ id }: IconBoxProps) => {
     }
   };
 
+  const handleToggleComplete = async () => {
+    try {
+      // 서버에 특정 할 일 완료 설정 (PATCH 메서드)
+      const patchResponse = await fetch(`/todos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content,
+          dueDate,
+          category,
+          completed: !completed,
+        }),
+      });
+      if (patchResponse.ok) {
+        if (!completed) {
+          console.log(`id:${id} Todo 완료 설정 성공`);
+        } else {
+          console.log(`id:${id} Todo 미완료 설정 성공`);
+        }
+
+        // 완료 요청(데이터 수정 요청) 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
+        const getResponse = await fetch('/todos');
+        const updatedTodos = await getResponse.json();
+
+        // 다시 가져온 데이터를 Zustand 스토어에 초기화
+        setTodos(updatedTodos);
+      } else {
+        console.error('할일 완료 설정에 실패했습니다.');
+        alert('할일 완료 설정에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('API 요청 중 에러 발생:', error);
+    }
+  };
+
   return (
     <div className="flex">
       {/* 클릭 시 완료 상태로 변경되는 아이콘 */}
-      {/* 전역 상태 관리를 통해 상태 가져오고 비교해서 적용하기 */}
-      <Square className="text-text-secondary" />
+      <button onClick={handleToggleComplete} className="cursor-pointer">
+        {completed ? (
+          <CheckSquare className="text-brand-color" />
+        ) : (
+          <Square className="text-text-secondary" />
+        )}
+      </button>
 
       <Link href={`/amend/${id}`}>
         <SquarePen className="text-text-secondary" />

@@ -15,11 +15,21 @@ const TodoContent = (props: TodoContentProps) => {
     <div className="relative flex items-center justify-between px-8">
       <div className="border-stroke-primary flex items-center justify-center gap-5 border-l border-dashed">
         {/* 할 일 제목 */}
-        <TextBox content={props.content} category={props.category} />
+        <TextBox
+          content={props.content}
+          category={props.category}
+          completed={props.completed}
+        />
       </div>
       {/* 완료 전/후, 수정, 삭제 아이콘 */}
       <div className="flex justify-end">
-        <IconBox id={props.id} />
+        <IconBox
+          id={props.id}
+          content={props.content}
+          dueDate={props.dueDate}
+          category={props.category}
+          completed={props.completed}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { format } from 'date-fns';
 
-export interface Todo {
+export interface TodoInterface {
   id: number;
   content: string;
   dueDate: string;
@@ -13,12 +13,12 @@ export interface Todo {
 
 interface TodoState {
   // state 목록
-  todos: Todo[];
+  todos: TodoInterface[];
   selectedDate: string;
   isAscending: boolean; // 오름차순&내림차순 상태
 
   // 액션함수
-  setTodos: (todo: Todo[]) => void;
+  setTodos: (todo: TodoInterface[]) => void;
   setSelectedDate: (date: string) => void;
   toggleSortOrder: () => void;
 }
@@ -43,6 +43,9 @@ export const useTodoStore = create<TodoState>((set) => ({
   toggleSortOrder: () => set((store) => ({ isAscending: !store.isAscending })),
 }));
 
+// 커스텀 훅 설정
+// 컴포넌트에서 커스텀 훅을 사용하면 좋은 점? -> 스토어 내부가 바뀌었을때 스토어 내부만 수정하면 됨
+
 // setTodos 커스텀 훅
 export const useSetTodos = () => {
   const setTodos = useTodoStore((store) => store.setTodos);
@@ -55,10 +58,16 @@ export const useSetSelectedDate = () => {
   return setSelectedDate;
 };
 
-// IsAscending 커스텀 훅
+// isAscending 커스텀 훅
 export const useIsAscending = () => {
   const isAscending = useTodoStore((store) => store.isAscending);
   return isAscending;
+};
+
+// toggleSortOrder 커스텀 훅
+export const useToggleSortOrder = () => {
+  const toggleSortOrder = useTodoStore((store) => store.toggleSortOrder);
+  return toggleSortOrder;
 };
 
 // todos 커스텀 훅
@@ -73,4 +82,3 @@ export const useSelectedDate = () => {
   const selectedDate = rawSelectedDate.split('T')[0]; // ex) 2026-04-06
   return selectedDate;
 };
-// 컴포넌트에서 커스텀 훅을 사용하면 좋은 점? -> 스토어 내부가 바뀌었을때 스토어 내부만 수정하면 됨
