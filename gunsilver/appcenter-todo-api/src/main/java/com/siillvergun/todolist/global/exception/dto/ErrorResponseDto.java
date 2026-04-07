@@ -1,6 +1,6 @@
-package com.siillvergun.todolist.global.error.dto;
+package com.siillvergun.todolist.global.exception.dto;
 
-import com.siillvergun.todolist.global.error.ErrorCode;
+import com.siillvergun.todolist.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

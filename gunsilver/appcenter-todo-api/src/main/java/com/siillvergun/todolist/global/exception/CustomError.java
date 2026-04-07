@@ -1,4 +1,4 @@
-package com.siillvergun.todolist.global.error;
+package com.siillvergun.todolist.global.exception;
 
 import lombok.Getter;
 
