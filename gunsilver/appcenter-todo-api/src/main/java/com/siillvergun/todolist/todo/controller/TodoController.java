@@ -27,8 +27,10 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> getAllTodo() {
-        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo();
+    public ResponseEntity<List<TodoResponseDto>> getAllTodo(
+            @RequestParam(defaultValue = "createdAt") String sort
+    ) {
+        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(sort);
         return ResponseEntity.ok(todoResponseDtoList);
     }
 
