@@ -31,7 +31,7 @@ public class TodoService {
         Sort sort = switch (sortType) {
             case "생성순" -> Sort.by(Sort.Direction.DESC, "createdAt");
             case "카테고리순" -> Sort.by(Sort.Direction.ASC, "category");
-            default -> Sort.by(Sort.Direction.DESC, "createdAt");
+            default -> throw new CustomError(ErrorCode.INVALID_INPUT_VALUE);
         };
 
         List<Todo> todos = todoRepository.findAllByDueDate(date, sort); // 페이지네이션으로 리펙토링
