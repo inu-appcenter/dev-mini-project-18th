@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,14 +27,14 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public List<TodoResponseDto> getAllTodo(String sortType) {
+    public List<TodoResponseDto> getAllTodo(LocalDate date, String sortType) {
         Sort sort = switch (sortType) {
             case "생성순" -> Sort.by(Sort.Direction.DESC, "createdAt");
             case "카테고리순" -> Sort.by(Sort.Direction.ASC, "category");
             default -> Sort.by(Sort.Direction.DESC, "createdAt");
         };
-        
-        List<Todo> todos = todoRepository.findAll(sort); // 페이지네이션으로 리펙토링
+
+        List<Todo> todos = todoRepository.findAllByDueDate(date, sort); // 페이지네이션으로 리펙토링
         return todos.stream().map(TodoResponseDto::from).toList();
     }
 
@@ -55,15 +56,5 @@ public class TodoService {
     public void deleteTodo(Long id) {
         Todo todo = findTodoById(id);
         todoRepository.delete(todo);
-    }
-
-    public enum TodoSortType {
-        CREATED,
-        CATEGORY
-    }
-
-    public enum TodoSortType {
-        CREATED,
-        CATEGORY
     }
 }
