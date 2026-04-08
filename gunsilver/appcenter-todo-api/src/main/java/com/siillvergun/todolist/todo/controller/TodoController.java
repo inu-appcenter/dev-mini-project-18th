@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,8 +28,11 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> getAllTodo() {
-        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo();
+    public ResponseEntity<List<TodoResponseDto>> getAllTodo(
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam LocalDate date
+    ) {
+        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(date, sort);
         return ResponseEntity.ok(todoResponseDtoList);
     }
 

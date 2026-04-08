@@ -8,9 +8,11 @@ import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import com.siillvergun.todolist.todo.entity.Todo;
 import com.siillvergun.todolist.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,8 +27,14 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public List<TodoResponseDto> getAllTodo() {
-        List<Todo> todos = todoRepository.findAll(); // 페이지네이션으로 리펙토링
+    public List<TodoResponseDto> getAllTodo(LocalDate date, String sortType) {
+        Sort sort = switch (sortType) {
+            case "생성순" -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case "카테고리순" -> Sort.by(Sort.Direction.ASC, "category");
+            default -> throw new CustomError(ErrorCode.INVALID_INPUT_VALUE);
+        };
+
+        List<Todo> todos = todoRepository.findAllByDueDate(date, sort); // 페이지네이션으로 리펙토링
         return todos.stream().map(TodoResponseDto::from).toList();
     }
 
