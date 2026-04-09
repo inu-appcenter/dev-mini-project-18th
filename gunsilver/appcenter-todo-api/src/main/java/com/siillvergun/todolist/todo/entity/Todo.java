@@ -40,10 +40,13 @@ public class Todo extends Base {
         this.category = category;
     }
 
-    public void changeTodo(String content, LocalDate dueDate, Category category, boolean completed) {
+    public void changeTodo(String content, LocalDate dueDate, Category category) {
         this.content = content;
         this.dueDate = dueDate;
         this.category = category;
-        this.completed = completed;
+    }
+
+    public void changeCompleted(boolean isCompleted) {
+        this.completed = isCompleted;
     }
 }

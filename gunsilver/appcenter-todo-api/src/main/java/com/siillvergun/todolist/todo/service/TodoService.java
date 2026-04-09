@@ -2,6 +2,7 @@ package com.siillvergun.todolist.todo.service;
 
 import com.siillvergun.todolist.global.exception.CustomError;
 import com.siillvergun.todolist.global.exception.ErrorCode;
+import com.siillvergun.todolist.todo.dto.TodoCompletedUpdateRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
 import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
@@ -47,7 +48,16 @@ public class TodoService {
     public TodoResponseDto updateTodo(Long id, TodoUpdateRequestDto requestDto) {
         Todo todo = findTodoById(id);
 
-        todo.changeTodo(requestDto.getContent(), requestDto.getDueDate(), requestDto.getCategory(), requestDto.isCompleted());
+        todo.changeTodo(requestDto.getContent(), requestDto.getDueDate(), requestDto.getCategory());
+
+        return TodoResponseDto.from(todo);
+    }
+
+    @Transactional
+    public TodoResponseDto updateCompleted(Long id, TodoCompletedUpdateRequestDto requestDto) {
+        Todo todo = findTodoById(id);
+
+        todo.changeCompleted(requestDto.isCompleted());
 
         return TodoResponseDto.from(todo);
     }

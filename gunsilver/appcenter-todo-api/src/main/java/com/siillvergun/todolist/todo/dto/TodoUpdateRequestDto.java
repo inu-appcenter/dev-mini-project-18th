@@ -19,5 +19,4 @@ public class TodoUpdateRequestDto {
     private LocalDate dueDate;
     @NotNull(message = "정해진 카테고리만 사용할 수 있습니다.")
     private Category category;
-    private boolean completed;
 }
