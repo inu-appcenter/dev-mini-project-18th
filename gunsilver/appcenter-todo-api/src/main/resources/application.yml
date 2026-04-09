@@ -9,6 +9,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      # update - 테이블 없으면 생성, 있으면 변경사항만 반영
+      # create - 실행할 때마다 테이블 새로 생성 (데이터 날아감)
+      # none - 아무것도 안 함 (운영 환경에서 주로 사용)
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
