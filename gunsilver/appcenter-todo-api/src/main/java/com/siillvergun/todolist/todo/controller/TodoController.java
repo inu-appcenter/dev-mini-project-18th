@@ -2,12 +2,15 @@ package com.siillvergun.todolist.todo.controller;
 
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
+import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import com.siillvergun.todolist.todo.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -18,16 +21,28 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<TodoResponseDto> createTodo(
-            @RequestBody TodoRequestDto todoRequestDto
+            @RequestBody @Valid TodoRequestDto todoRequestDto
     ) {
         TodoResponseDto todoResponseDto = todoService.createTodo(todoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(todoResponseDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> getAllTodo() {
-        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo();
+    public ResponseEntity<List<TodoResponseDto>> getAllTodo(
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam LocalDate date
+    ) {
+        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(date, sort);
         return ResponseEntity.ok(todoResponseDtoList);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TodoResponseDto> updateTodo(
+            @PathVariable Long id,
+            @RequestBody @Valid TodoUpdateRequestDto todoUpdateRequestDto
+    ) {
+        TodoResponseDto todoResponseDto = todoService.updateTodo(id, todoUpdateRequestDto);
+        return ResponseEntity.ok(todoResponseDto);
     }
 
     @DeleteMapping("/{id}")
