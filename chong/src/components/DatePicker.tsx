@@ -1,290 +1,295 @@
 "use client";
 import {
-  ButtonProps,
-  DivProps,
-  SvgProps,
-  TableProps,
-  TdProps,
-  TheadProps,
-  ThProps,
-  TrProps,
+    ButtonProps,
+    DivProps,
+    TableProps,
+    TdProps,
+    TheadProps,
+    ThProps,
+    TrProps,
 } from "@/types/Props";
-import Btn from "./Btn";
+import Button from "./Button";
 import dayjs from "dayjs";
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import Portal from "./Portal";
-import { nanoid } from "nanoid";
-import { KorDateAry } from "@/types/Date";
-import ArrowBackIcon from "@images/ArrowBack.svg";
-import ArrowForwardIcon from "@images/ArrowForward.svg";
+import { KorDateAry } from "@constants/Date";
 import CalenderIcon from "@images/Calender.svg";
+import ArrowForwardIcon from "@images/ArrowForward.svg";
+import ArrowBackIcon from "@images/ArrowBack.svg";
+import { motion, AnimatePresence } from "framer-motion";
+import clsx from "clsx";
 
 export interface DatePickerProps extends Omit<DivProps, "defaultValue" | "onChange"> {
-  ControlProps?: DivProps;
-  ShowerProps?: DivProps;
-  ArrowBackIconProps?: SvgProps;
-  CalenderIconProps?: SvgProps;
-  ArrowForwardIconProps?: SvgProps;
-  TrgProps?: ButtonProps;
-  PositionerProps?: DivProps;
-  TableProps?: TableProps;
-  TableHeadProps?: TheadProps;
-  TableHeadRowProps?: TrProps;
-  TableThProps?: ThProps;
-  TableRowProps?: TrProps;
-  TableDataProps?: TdProps;
-  defaultOpen?: boolean;
-  defaultValue?: dayjs.Dayjs;
-  onChange?: (value: dayjs.Dayjs) => void;
-  format?: "YYYY" | `YYYY${string}MM` | `YYYY${string}MM${string}DD`;
+    ControlProps?: DivProps;
+    ShowerProps?: DivProps;
+    TrgProps?: ButtonProps;
+    TableProps?: TableProps;
+    TableHeadProps?: TheadProps;
+    TableHeadRowProps?: TrProps;
+    TableThProps?: ThProps;
+    TableRowProps?: TrProps;
+    TableDataProps?: TdProps;
+    defaultOpen?: boolean;
+    defaultValue?: dayjs.Dayjs;
+    onChange?: (value: dayjs.Dayjs) => void;
+    format?: "YYYY" | `YYYY${string}MM` | `YYYY${string}MM${string}DD`;
+}
+
+interface ContentI {
+    prev: number[];
+    curr: number[];
+    next: number[];
 }
 
 export function DatePicker({
-  ControlProps,
-  ShowerProps,
-  ArrowBackIconProps,
-  CalenderIconProps,
-  ArrowForwardIconProps,
-  TrgProps,
-  PositionerProps,
-  TableProps,
-  TableHeadProps,
-  TableHeadRowProps,
-  TableThProps,
-  TableRowProps,
-  TableDataProps,
-  defaultOpen,
-  defaultValue,
-  onChange,
-  format,
-  ...rest
+    ControlProps,
+    ShowerProps,
+    TrgProps,
+    TableProps,
+    TableHeadProps,
+    TableHeadRowProps,
+    TableThProps,
+    TableRowProps,
+    TableDataProps,
+    defaultOpen,
+    defaultValue,
+    onChange,
+    format,
+    ...rest
 }: DatePickerProps) {
-  //Positioner의 열림 여부를 제어하는 state
-  const [Mounted, setMounted] = useState<boolean>(defaultOpen ?? false);
-  //mounted랑 다르게 mount애니메이션 나타내는 state
-  const [Open, setOpen] = useState<boolean>(defaultOpen ?? false);
-  const [Value, setValue] = useState<dayjs.Dayjs>(defaultValue ?? dayjs().locale("ko")); //현재 날짜
-  const [View, setView] = useState<dayjs.Dayjs>(Value);
+    //locale을 ko로 설정
+    dayjs.locale("ko");
 
-  //onChange 설정
-  useEffect(() => {
-    onChange?.(Value);
-  }, [Value]);
+    //Positioner의 열림 여부를 제어하는 state
+    const [mounted, setMounted] = useState<boolean>(defaultOpen ?? false);
+    const [value, setValue] = useState<dayjs.Dayjs>(defaultValue ?? dayjs().locale("ko")); //현재 날짜
+    const [view, setView] = useState<dayjs.Dayjs>(value);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  //처음에 locale을 ko로 설정
-  useEffect(() => {
-    dayjs().locale("ko");
-  }, []);
+    //onChange 설정
+    useEffect(() => {
+        onChange?.(value);
+    }, [value]);
 
-  //dialog가 열리고 닫힐때 마다 view를 value(현재 날짜)로 설정
-  useEffect(() => {
-    setView(Value);
-  }, [Mounted]);
+    //dialog가 열리고 닫힐때 마다 view를 value(현재 날짜)로 설정
+    useEffect(() => {
+        setView(value);
+    }, [mounted]);
 
-  //Positioner보여주는 함수
-  function show() {
-    setMounted(true);
-    requestAnimationFrame(() => {
-      setOpen(true);
+    //content
+    const [content, setContent] = useState<ContentI>({
+        prev: [],
+        curr: Array.from({ length: view.daysInMonth() }, (_, i) => i + 1),
+        next: [],
     });
-  }
 
-  //Positioner 숨기는 함수
-  function hide() {
-    setOpen(false);
-    setTimeout(() => {
-      setMounted(false);
-    }, 100);
-  }
+    //view가 업데이트 될때마다 content도 업데이트
+    useEffect(() => {
+        setContent((ct) => {
+            let prev: number[] = [];
+            const CurrDay = view.startOf("month").day();
+            const PrevDate = view
+                .subtract(1, "month")
+                .endOf("month")
+                .subtract(CurrDay, "day")
+                .date();
+            for (let i = 0; i < CurrDay; ++i) {
+                prev[i] = PrevDate + i;
+            }
 
-  //table에 렌더링될 content
-  const Content = useMemo(() => {
-    let ary: ReactElement[] = [];
-    let tmp: ReactElement[] = [];
+            //보여줘야될 curr의 날짜의 개수가 현재 curr보다 많다면 추가
+            if (view.daysInMonth() > ct.curr.length) {
+                for (let i = content.curr[-1] + 1; i <= view.daysInMonth(); ++i) {
+                    ct.curr[i - 1] = i;
+                }
+            } else if (view.daysInMonth() < ct.curr.length) {
+                //적다면 기존 배열에서 재활용
+                ct.curr = ct.curr.slice(0, view.daysInMonth());
+            }
 
-    //배열에 push하는 함수
-    function push(el: ReactElement) {
-      tmp.push(el);
-      if (tmp.length === 7) {
-        ary.push(
-          <tr className="border-0 w-full flex justify-evenly my-2" key={nanoid()}>
-            {tmp.map((v) => v)}
-          </tr>
-        );
+            let next: number[] = [];
+            const LastDay = view.endOf("month").day();
+            for (let i = 0; i < 6 - LastDay; ++i) {
+                next[i] = i + 1;
+            }
 
-        tmp = [];
-      }
-    }
+            return {
+                prev,
+                next,
+                curr: ct.curr,
+            };
+        });
+    }, [view]);
 
-    const FirstDay = View.startOf("month").day();
-    let PrevDate = View.subtract(1, "month").endOf("month").date() - FirstDay + 1;
-    for (let i = 0; i < FirstDay; ++i) {
-      push(
-        <td
-          className="text-base font-medium opacity-50 flex items-center justify-center
-        w-8 aspect-square cursor-pointer hover:bg-[rgba(129,139,152,0.15)]"
-          key={nanoid()}
-          onClick={() => {
-            setValue(View.subtract(1, "month").set("date", PrevDate));
-            hide();
-          }}
-        >
-          {PrevDate}
-        </td>
-      );
-      ++PrevDate;
-    }
+    //content안의 div들이 click될때 실행할 함수
+    const setValueWhenClick = useCallback((d: dayjs.Dayjs) => {
+        setValue(d);
+        setMounted(false);
+        const input = inputRef.current;
+        if (!input) return;
+        input.value = d.format("YYYY년 MM월 DD일");
+    }, []);
 
-    for (let i = 1; i <= View.daysInMonth(); ++i) {
-      push(
-        <td
-          className={`text-base text-current flex items-center justify-center w-8 aspect-square 
-        hover:bg-[rgba(129,139,152,0.15)]
-        ${View.set("date", i).isSame(Value) && i === Value.date() ? "font-bold underline underline-offset-6" : "font-medium"}`}
-          key={nanoid()}
-          onClick={() => {
-            setValue(View.set("date", i));
-            hide();
-          }}
-        >
-          {i}
-        </td>
-      );
-    }
-
-    let cnt = 1;
-    for (let i = View.endOf("month").day(); i <= 6; ++i) {
-      push(
-        <td
-          className="text-base font-medium opacity-50 flex items-center justify-center w-8 
-        aspect-square hover:bg-[rgba(129,139,152,0.15)]"
-          key={nanoid()}
-          onClick={() => {
-            setValue(View.add(1, "month").set("date", cnt));
-            hide();
-          }}
-        >
-          {cnt}
-        </td>
-      );
-      ++cnt;
-    }
-
-    return <>{ary.map((tr) => tr)}</>;
-  }, [View]);
-
-  return (
-    <div
-      {...rest}
-      className={twMerge("w-auto max-w-full h-auto flex flex-col relative", rest.className)}
-      data-scope="date-picker"
-      data-part="root"
-    >
-      <div
-        {...ControlProps}
-        className={twMerge(
-          "flex items-center w-auto h-auto max-w-full max-h-full relative rounded-sm",
-          ControlProps?.className
-        )}
-        data-scope="date-picker"
-        data-part="control"
-      >
+    return (
         <div
-          {...ShowerProps}
-          className={twMerge(
-            "flex-[1_1_0%] flex items-center justify-center h-10 max-w-full max-h-full text-sm",
-            "rounded-sm appearance-none",
-            "text-(--fg-primary)",
-            ShowerProps?.className
-          )}
-          data-scope="date-picker"
-          data-part="shower"
+            {...rest}
+            className={twMerge("relative flex h-auto w-full max-w-full flex-col", rest.className)}
+            data-scope="date-picker"
+            data-part="root"
         >
-          <Btn
-            className="p-0 w-6 h-6 mr-auto ml-6.5 hover:bg-[rgba(129,139,152,0.15)]
-                        flex items-center justify-center"
-            onClick={() => {
-              if (Mounted && Open) setView((v) => v.subtract(1, "month"));
-              else setValue((v) => v.subtract(5, "day"));
-            }}
-          >
-            <ArrowBackIcon {...ArrowBackIconProps} />
-          </Btn>
-
-          <div
-            className="flex flex-row items-center justify-center mr-2 h-6 text-(--brand-color)
-                    font-bold"
-          >
-            <Btn
-              className="w-6 h-6 z-2 hover:bg-[rgba(129,139,152,0.15)] p-[0.175rem] rounded-sm 
-                          text-(--text-primary) mr-0.5"
-              onClick={() => {
-                if (!Mounted) show();
-                else hide();
-              }}
+            <div
+                {...ControlProps}
+                className={twMerge(
+                    "relative flex h-auto max-h-full w-full max-w-full items-center rounded-sm",
+                    ControlProps?.className,
+                )}
+                data-scope="date-picker"
+                data-part="control"
             >
-              <CalenderIcon {...CalenderIconProps} />
-            </Btn>
-            {`${Value.format("MM월 DD일")} ${KorDateAry[Value.day()]}요일`}
-          </div>
+                <div
+                    {...ShowerProps}
+                    className={twMerge(
+                        "flex h-8 max-h-full w-full max-w-full items-center justify-start p-2",
+                        "appearance-none rounded-sm border border-solid border-(--stroke-primary)",
+                        "text-sm text-(--fg-primary)",
+                        "focus-within:border-black",
+                        ShowerProps?.className,
+                    )}
+                    data-scope="date-picker"
+                    data-part="shower"
+                >
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        onFocus={(e) => {
+                            e.currentTarget.value = e.currentTarget.value.replaceAll(/[\D]/g, "");
+                        }}
+                        onBeforeInput={(e) => {
+                            if (!/[0-9]/.test(e.data) || e.currentTarget.value.length > 8) {
+                                e.preventDefault();
+                            }
+                        }}
+                        onBlur={(e) => {
+                            let tmp = dayjs(e.target.value);
+                            if (!tmp.isValid()) tmp = dayjs();
+                            setValue(tmp);
+                            e.target.value = tmp.format("YYYY년 MM월 DD일");
+                        }}
+                        placeholder="연도. 월. 일"
+                        className={clsx(
+                            "h-8 border-0 text-base w-full",
+                            "z-1 focus:border-0 focus:outline-0",
+                        )}
+                        ref={inputRef}
+                    />
+                    <div className="absolute top-0 right-2 flex h-full w-6 items-center justify-center">
+                        <Button
+                            className={clsx(
+                                "relative z-2 h-6 w-6 rounded-sm p-[0.175rem]",
+                                "hover-bg",
+                            )}
+                            onClick={() => {
+                                setMounted((m) => !m);
+                            }}
+                            tabIndex={-1}
+                        >
+                            <CalenderIcon />
+                        </Button>
+                    </div>
+                </div>
+            </div>
 
-          <Btn
-            className="p-0 w-6 h-6 ml-auto mr-6.5 hover:bg-[rgba(129,139,152,0.15)]
-                        flex items-center justify-center"
-            onClick={() => {
-              if (Mounted && Open) setView((v) => v.add(1, "month"));
-              else setValue((v) => v.add(5, "day"));
-            }}
-          >
-            <ArrowForwardIcon {...ArrowForwardIconProps} />
-          </Btn>
+            <AnimatePresence>
+                {mounted && (
+                    <motion.div
+                        className={twMerge(
+                            "absolute h-auto w-[90%]",
+                            "flex flex-col items-center",
+                            "border border-solid border-(--stroke-primary)",
+                            "top-10 left-[50%] z-3 translate-x-[-50%] rounded-sm bg-(--bg-color) p-2",
+                        )}
+                        data-scope="date-picker"
+                        data-part="positioner"
+                        initial={{ y: 5, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 5, opacity: 0 }}
+                        transition={{
+                            duration: 0.2,
+                            ease: "easeInOut",
+                        }}
+                    >
+                        <div className="z-3 flex w-full max-w-full justify-between px-2">
+                            <Button
+                                className={clsx(
+                                    "hover-bg aspect-square h-6",
+                                    "flex items-center justify-center",
+                                )}
+                                onClick={() => setView((v) => v.subtract(1, "month"))}
+                            >
+                                <ArrowBackIcon />
+                            </Button>
+                            <div>{view.format(format ?? "YYYY년 MM월")}</div>
+
+                            <Button
+                                className={clsx(
+                                    "hover-bg aspect-square h-6",
+                                    "flex items-center justify-center",
+                                )}
+                                onClick={() => setView((v) => v.add(1, "month"))}
+                            >
+                                <ArrowForwardIcon />
+                            </Button>
+                        </div>
+
+                        <div className="mt-2 mb-1 grid w-full grid-cols-7">
+                            {KorDateAry.map((v) => (
+                                <div className="flex items-center justify-center">{v}</div>
+                            ))}
+                        </div>
+
+                        <div className="grid w-full grid-cols-7">
+                            {content.prev.map((d) => (
+                                <div
+                                    className={clsx(
+                                        "hover-bg flex aspect-square items-center justify-center",
+                                        "opacity-50",
+                                    )}
+                                    onClick={() => {
+                                        setValueWhenClick(view.subtract(1, "month").set("date", d));
+                                    }}
+                                >
+                                    {d}
+                                </div>
+                            ))}
+
+                            {content.curr.map((d) => (
+                                <div
+                                    className="hover-bg flex aspect-square items-center justify-center"
+                                    onClick={() => {
+                                        setValueWhenClick(view.set("date", d));
+                                    }}
+                                >
+                                    {d}
+                                </div>
+                            ))}
+
+                            {content.next.map((d) => (
+                                <div
+                                    className={clsx(
+                                        "hover-bg flex aspect-square items-center justify-center",
+                                        "opacity-50",
+                                    )}
+                                    onClick={() => {
+                                        setValueWhenClick(view.add(1, "month").set("date", d));
+                                    }}
+                                >
+                                    {d}
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
-      </div>
-
-      <Portal
-        className="w-full max-w-full max-h-full h-full absolute z-1"
-        onClick={(e) => {
-          if (e.currentTarget === e.target) hide();
-        }}
-      ></Portal>
-
-      {Mounted && (
-        <div
-          {...PositionerProps}
-          className={twMerge(
-            "w-full max-w-full h-auto border-y border-solid border-(--stroke-primary) absolute",
-            "top-12.5 p-2 rounded-sm z-2 bg-(--bg-color)",
-            PositionerProps?.className
-          )}
-          data-scope="date-picker"
-          data-part="positioner"
-          data-open={open}
-        >
-          <div className="flex flex-row w-full max-w-full justify-center z-2">
-            {View.format(format ?? "YYYY년 MM월")}
-          </div>
-
-          <table
-            {...TableProps}
-            className={twMerge(
-              "border-0 border-separate w-full max-w-full h-auto",
-              TableProps?.className
-            )}
-          >
-            <thead
-              className="border-0 w-full max-w-full h-auto
-            mt-6 flex justify-evenly"
-            >
-              {KorDateAry.map((kor) => (
-                <th className="w-8 aspect-square whitespace-nowrap">{kor}</th>
-              ))}
-            </thead>
-
-            <tbody className="border-0 w-full h-auto flex flex-col items-center">{Content}</tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
+    );
 }
