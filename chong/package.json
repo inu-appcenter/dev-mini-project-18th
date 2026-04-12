@@ -12,21 +12,25 @@
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.20",
+    "framer-motion": "^12.38.0",
     "nanoid": "^5.1.7",
     "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "tailwind-merge": "^3.5.0"
+    "redaxios": "^0.5.1",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
-    "@types/node": "^20.19.37",
+    "@types/node": "^20.19.39",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.1",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   },
