@@ -53,7 +53,7 @@ jobs:
             docker rm todo-api || true
             docker run -d \
               --name todo-api \
-              -p 8080:8080 \
+              -p 8018:8080 \
               -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
               -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
               -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
