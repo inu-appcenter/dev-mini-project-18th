@@ -11,6 +11,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.19.1",
     "@svgr/webpack": "^8.1.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.20",
