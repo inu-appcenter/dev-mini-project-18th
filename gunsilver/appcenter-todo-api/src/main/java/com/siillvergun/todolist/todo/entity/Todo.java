@@ -40,10 +40,15 @@ public class Todo extends Base {
         this.category = category;
     }
 
-    public void changeTodo(String content, LocalDate dueDate, Category category, boolean completed) {
+    // 수정 모달창에서 수정 가능한 필드
+    public void changeTodo(String content, LocalDate dueDate, Category category) {
         this.content = content;
         this.dueDate = dueDate;
         this.category = category;
-        this.completed = completed;
+    }
+
+    // 메인 페이지에서 완료여부 수정 가능
+    public void changeCompleted(boolean isCompleted) {
+        this.completed = isCompleted;
     }
 }
