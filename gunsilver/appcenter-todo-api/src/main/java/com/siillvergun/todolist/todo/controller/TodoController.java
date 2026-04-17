@@ -1,5 +1,6 @@
 package com.siillvergun.todolist.todo.controller;
 
+import com.siillvergun.todolist.todo.SortType;
 import com.siillvergun.todolist.todo.dto.TodoCompletedUpdateRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
@@ -30,7 +31,7 @@ public class TodoController {
 
     @GetMapping
     public ResponseEntity<List<TodoResponseDto>> getAllTodo(
-            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam SortType sort,
             @RequestParam LocalDate date
     ) {
         List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(date, sort);
