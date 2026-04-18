@@ -20,13 +20,13 @@ const nextConfig: NextConfig = {
         },
     },
     async rewrites() {
-    return [
-      {
-        source: "/api/proxy/:path*",
-        destination: `${process.env.SERVER_URL}/:path*`,
-      },
-    ];
-  },
+        return [
+            {
+                source: "/api/proxy/:path*",
+                destination: `${process.env.SERVER_URL}/:path*`,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

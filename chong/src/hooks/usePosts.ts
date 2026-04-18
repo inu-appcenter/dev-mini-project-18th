@@ -7,6 +7,6 @@ export function usePosts(date: string) {
         queryKey: ["posts", date],
         queryFn: async () => await getPosts(date),
         refetchOnMount: true,
-        refetchOnReconnect: false
-    });      
+        refetchOnReconnect: false,
+    });
 }

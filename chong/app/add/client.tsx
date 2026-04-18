@@ -47,11 +47,11 @@ export default function AddClient() {
     const searchParams = useSearchParams();
     useEffect(() => {
         const dateParams = searchParams.get("date");
-        if(dateParams) {
+        if (dateParams) {
             const d = dayjs(dateParams, DateFormat1, true);
-            if(d.isValid()) setDate(d);
+            if (d.isValid()) setDate(d);
         }
-    }, [])
+    }, []);
 
     return (
         <>
@@ -90,7 +90,7 @@ export default function AddClient() {
                         setDate(d);
                     }}
                     InputProps={{
-                        defaultValue: date ? date.format("YYYY년 MM월 DD일") : undefined
+                        defaultValue: date ? date.format("YYYY년 MM월 DD일") : undefined,
                     }}
                 />
 
@@ -149,7 +149,7 @@ export default function AddClient() {
                         )}
                         onClick={async () => {
                             if (!step) return;
-                            if(!content || !category || !date) return;
+                            if (!content || !category || !date) return;
 
                             try {
                                 const res = await api.post("/todos", {

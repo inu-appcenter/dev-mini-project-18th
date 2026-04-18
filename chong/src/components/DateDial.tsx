@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import dayjs from "@constants/dayjs";
-import { DateFormat1, KorDateAry } from "@/constants/Date";
+import { KorDateAry } from "@/constants/Date";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
@@ -23,13 +23,13 @@ export default function DateDial({ date, index }: Props) {
     }, [date, index]);
 
     return (
-        <div className="flex h-fit w-full gap-x-2.5 shadow-md p-0">
+        <div className="flex h-fit w-full gap-x-2.5 p-0 shadow-md">
             {ary.map((d, i) => (
                 <div
                     className={clsx(
-                        "rounded-t-sm w-[20%] gap-1 aspect-square",
+                        "aspect-square w-[20%] gap-1 rounded-t-sm",
                         "flex flex-col items-center justify-center",
-                        index === i ? "bg-(--brand-color)" : "bg-transparent"
+                        index === i ? "bg-(--brand-color)" : "bg-transparent",
                     )}
                     onClick={() => {
                         router.push(`/read/${date}/${i}`);

@@ -48,8 +48,6 @@ const TodoItem = memo(({ item, onToggle, onDelete }: TodoItemProps) => {
         router.push(url);
     }, [id, content, category, dueDate, completed]);
 
-    
-
     return (
         <div className="flex h-fit w-full items-center justify-between px-6">
             <div className={cn("relative px-1.5")}>
@@ -100,9 +98,7 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
     const actions = useDialog(useShallow((store) => store.actions));
 
     const { data, isLoading, isError, error, isRefetching } = usePosts(
-        dayjs(date)
-            .add(indexParam, "day")
-            .format(DateFormat1),
+        dayjs(date).add(indexParam, "day").format(DateFormat1),
     );
 
     const showLoading = isLoading || isRefetching;
@@ -127,8 +123,7 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
     //done/todo 분리 및 정렬은 items·direction으로부터 파생 (중복 state 제거)
     const { done, todo } = useMemo(() => {
         const n = direction ? 1 : -1;
-        const compare = (a: TodoI, b: TodoI) =>
-            (a.createdAt.isBefore(b.createdAt) ? 1 : -1) * n;
+        const compare = (a: TodoI, b: TodoI) => (a.createdAt.isBefore(b.createdAt) ? 1 : -1) * n;
 
         const done: TodoI[] = [];
         const todo: TodoI[] = [];
@@ -141,9 +136,7 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
     }, [items, direction]);
 
     const changeCompleted = useCallback(async (id: number, to: boolean) => {
-        setItems((prev) =>
-            prev.map((it) => (it.id === id ? { ...it, completed: to } : it)),
-        );
+        setItems((prev) => prev.map((it) => (it.id === id ? { ...it, completed: to } : it)));
         const res = await api.patch(`/todos/${id}/completed`, { completed: to });
         console.log(res.status, res.statusText);
     }, []);
@@ -222,11 +215,11 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
                 </div>
             </Dialog>
 
-            <div className={clsx("flex h-fit w-full items-center justify-between px-3",
-                {
-                    "mt-2": !hasItems
-                }
-            )}>
+            <div
+                className={clsx("flex h-fit w-full items-center justify-between px-3", {
+                    "mt-2": !hasItems,
+                })}
+            >
                 {hasItems && (
                     <div className="box-content h-fit w-fit pl-4.5">
                         <Line />

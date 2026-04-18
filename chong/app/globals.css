@@ -82,7 +82,7 @@ body {
 body {
     border: 2px solid var(--stroke-primary);
     border-radius: 6px;
-    scrollbar-width: none;;
+    scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {

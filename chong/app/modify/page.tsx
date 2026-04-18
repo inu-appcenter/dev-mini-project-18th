@@ -180,15 +180,14 @@ export default function Modify() {
                             });
 
                             const data = TodoRawSchema.safeDecode(res.data);
-                            if(res.status !== 200) {
+                            if (res.status !== 200) {
                                 console.log("status : ", res.status);
                                 console.log("statusText : ", res.statusText);
                                 console.error("Res의 status가 200이 아님.\n", res);
-                            }
-                            else if(!data.success) {
+                            } else if (!data.success) {
                                 console.error("dto가 다름.\n", data);
                                 console.log(data.error.issues);
-                            } else router.back()
+                            } else router.back();
                         }}
                     >
                         확인

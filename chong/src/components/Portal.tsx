@@ -20,6 +20,6 @@ export function Portal({ mount, children, ...rest }: PortalProps) {
     return mounted
         ? createPortal(<div {...rest}>{children}</div>, mount ?? document.documentElement)
         : undefined;
-};
+}
 
 export default Portal;

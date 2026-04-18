@@ -17,10 +17,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const [startY, setStartY] = useState(0);
 
     let pathname = usePathname();
-    if(pathname === "/") {
+    if (pathname === "/") {
         pathname = `/read/${dayjs().format(DateFormat1)}/0`;
     }
-    let pathnames = pathname.split('/');
+    let pathnames = pathname.split("/");
     let date = dayjs(pathnames[2]);
     let index = Number(pathnames[3]);
     let dateQuery = date.add(index, "day").format(DateFormat1);
