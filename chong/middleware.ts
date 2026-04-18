@@ -3,7 +3,7 @@ import "dayjs/locale/ko";
 import dayjs from "@constants/dayjs";
 import { DateFormat1 } from "@/constants/Date";
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     if (pathname === "/" || pathname === "/read" || pathname === "/read/") {
@@ -16,5 +16,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+    runtime: "experimental-edge"
+}
