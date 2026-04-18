@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ClientAdd from "./client";
 import { Metadata } from "next";
 
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function Add() {
-    return <ClientAdd />;
+    return (
+        <Suspense>
+            <ClientAdd />
+        </Suspense>
+    );
 }
