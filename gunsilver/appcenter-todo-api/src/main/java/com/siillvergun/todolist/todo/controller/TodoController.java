@@ -1,5 +1,7 @@
 package com.siillvergun.todolist.todo.controller;
 
+import com.siillvergun.todolist.todo.SortType;
+import com.siillvergun.todolist.todo.dto.TodoCompletedUpdateRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoResponseDto;
 import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
@@ -29,7 +31,7 @@ public class TodoController {
 
     @GetMapping
     public ResponseEntity<List<TodoResponseDto>> getAllTodo(
-            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam SortType sort,
             @RequestParam LocalDate date
     ) {
         List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(date, sort);
@@ -43,6 +45,13 @@ public class TodoController {
     ) {
         TodoResponseDto todoResponseDto = todoService.updateTodo(id, todoUpdateRequestDto);
         return ResponseEntity.ok(todoResponseDto);
+    }
+
+    @PatchMapping("/{id}/completed")
+    public ResponseEntity<TodoResponseDto> updateCompleted(
+            @PathVariable Long id,
+            @RequestBody TodoCompletedUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(todoService.updateCompleted(id, requestDto));
     }
 
     @DeleteMapping("/{id}")
