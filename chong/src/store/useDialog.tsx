@@ -25,8 +25,8 @@ export const useDialog = create<DialogStoreI>((set) => {
                 set(({ state }) => ({ state: { ...state, open: !state.open } }));
             },
             setOpen(open: boolean) {
-                set(({state: {open}}));
-            }
+                set({ state: { open } });
+            },
         },
     };
 });

@@ -6,7 +6,7 @@ import { DateFormat1 } from "@/constants/Date";
 export function proxy(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
-    if(pathname === "/" || pathname === "/read" || pathname === "/read/") {
+    if (pathname === "/" || pathname === "/read" || pathname === "/read/") {
         const url = req.nextUrl.clone();
         url.pathname = `/read/${dayjs().format(DateFormat1)}/0`;
         return NextResponse.rewrite(url);
@@ -16,7 +16,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-    matcher: [
-        "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    ],
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

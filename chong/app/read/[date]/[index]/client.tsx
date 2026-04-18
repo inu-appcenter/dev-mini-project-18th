@@ -10,8 +10,8 @@ interface Props {
 export default function ReadClient({ date, index }: Props) {
     return (
         <>
-        <DateDial date={date} index={index} />
-        <TodoList date={date} index={index} />
+            <DateDial date={date} index={index} />
+            <TodoList date={date} index={index} />
         </>
-    )
+    );
 }
