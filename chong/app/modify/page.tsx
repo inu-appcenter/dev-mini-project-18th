@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/Button";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ArrowBackIcon from "@images/ArrowBack.svg";
 import Head from "next/head";
 import clsx from "clsx";
@@ -27,6 +27,14 @@ const CategoryToIndex: Record<CategoryT, number> = {
 };
 
 export default function Modify() {
+    return (
+        <Suspense>
+            <ModifyInner />
+        </Suspense>
+    );
+}
+
+function ModifyInner() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
