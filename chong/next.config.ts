@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+    output: "standalone",
     reactStrictMode: false,
     webpack(config) {
         // svgr 설정 추가
