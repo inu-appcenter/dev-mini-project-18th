@@ -2,6 +2,7 @@
 import {
     ButtonProps,
     DivProps,
+    InputProps,
     TableProps,
     TdProps,
     TheadProps,
@@ -9,26 +10,21 @@ import {
     TrProps,
 } from "@/types/Props";
 import Button from "./Button";
-import dayjs from "dayjs";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { twMerge } from "tailwind-merge";
+import dayjs from "@constants/dayjs";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { KorDateAry } from "@constants/Date";
 import CalenderIcon from "@images/Calender.svg";
 import ArrowForwardIcon from "@images/ArrowForward.svg";
 import ArrowBackIcon from "@images/ArrowBack.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import { cn } from "@/utils/cn";
 
 export interface DatePickerProps extends Omit<DivProps, "defaultValue" | "onChange"> {
     ControlProps?: DivProps;
     ShowerProps?: DivProps;
     TrgProps?: ButtonProps;
-    TableProps?: TableProps;
-    TableHeadProps?: TheadProps;
-    TableHeadRowProps?: TrProps;
-    TableThProps?: ThProps;
-    TableRowProps?: TrProps;
-    TableDataProps?: TdProps;
+    InputProps?: InputProps;
     defaultOpen?: boolean;
     defaultValue?: dayjs.Dayjs;
     onChange?: (value: dayjs.Dayjs) => void;
@@ -41,22 +37,17 @@ interface ContentI {
     next: number[];
 }
 
-export function DatePicker({
+export const DatePicker = React.memo(({
     ControlProps,
     ShowerProps,
     TrgProps,
-    TableProps,
-    TableHeadProps,
-    TableHeadRowProps,
-    TableThProps,
-    TableRowProps,
-    TableDataProps,
+    InputProps,
     defaultOpen,
     defaultValue,
     onChange,
     format,
     ...rest
-}: DatePickerProps) {
+}: DatePickerProps) => {
     //locale을 ko로 설정
     dayjs.locale("ko");
 
@@ -133,13 +124,13 @@ export function DatePicker({
     return (
         <div
             {...rest}
-            className={twMerge("relative flex h-auto w-full max-w-full flex-col", rest.className)}
+            className={cn("relative flex h-auto w-full max-w-full flex-col", rest.className)}
             data-scope="date-picker"
             data-part="root"
         >
             <div
                 {...ControlProps}
-                className={twMerge(
+                className={cn(
                     "relative flex h-auto max-h-full w-full max-w-full items-center rounded-sm",
                     ControlProps?.className,
                 )}
@@ -148,7 +139,7 @@ export function DatePicker({
             >
                 <div
                     {...ShowerProps}
-                    className={twMerge(
+                    className={cn(
                         "flex h-8 max-h-full w-full max-w-full items-center justify-start p-2",
                         "appearance-none rounded-sm border border-solid border-(--stroke-primary)",
                         "text-sm text-(--fg-primary)",
@@ -181,6 +172,7 @@ export function DatePicker({
                             "z-1 focus:border-0 focus:outline-0",
                         )}
                         ref={inputRef}
+                        defaultValue={InputProps?.defaultValue}
                     />
                     <div className="absolute top-0 right-2 flex h-full w-6 items-center justify-center">
                         <Button
@@ -202,7 +194,7 @@ export function DatePicker({
             <AnimatePresence>
                 {mounted && (
                     <motion.div
-                        className={twMerge(
+                        className={cn(
                             "absolute h-auto w-[90%]",
                             "flex flex-col items-center",
                             "border border-solid border-(--stroke-primary)",
@@ -242,13 +234,15 @@ export function DatePicker({
                         </div>
 
                         <div className="mt-2 mb-1 grid w-full grid-cols-7">
-                            {KorDateAry.map((v) => (
-                                <div className="flex items-center justify-center">{v}</div>
+                            {KorDateAry.map((v, i) => (
+                                <div className="flex items-center justify-center"
+                                key={i}
+                                >{v}</div>
                             ))}
                         </div>
 
                         <div className="grid w-full grid-cols-7">
-                            {content.prev.map((d) => (
+                            {content.prev.map((d, i) => (
                                 <div
                                     className={clsx(
                                         "hover-bg flex aspect-square items-center justify-center",
@@ -257,23 +251,25 @@ export function DatePicker({
                                     onClick={() => {
                                         setValueWhenClick(view.subtract(1, "month").set("date", d));
                                     }}
+                                    key={i}
                                 >
                                     {d}
                                 </div>
                             ))}
 
-                            {content.curr.map((d) => (
+                            {content.curr.map((d, i) => (
                                 <div
                                     className="hover-bg flex aspect-square items-center justify-center"
                                     onClick={() => {
                                         setValueWhenClick(view.set("date", d));
                                     }}
+                                    key={i}
                                 >
                                     {d}
                                 </div>
                             ))}
 
-                            {content.next.map((d) => (
+                            {content.next.map((d, i) => (
                                 <div
                                     className={clsx(
                                         "hover-bg flex aspect-square items-center justify-center",
@@ -282,6 +278,7 @@ export function DatePicker({
                                     onClick={() => {
                                         setValueWhenClick(view.add(1, "month").set("date", d));
                                     }}
+                                    key={i}
                                 >
                                     {d}
                                 </div>
@@ -292,4 +289,4 @@ export function DatePicker({
             </AnimatePresence>
         </div>
     );
-}
+});
