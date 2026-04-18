@@ -1,13 +1,14 @@
 import React from "react";
-type ComponentProps<T extends React.ElementType> = React.ComponentPropsWithRef<T>;
 
-export type DivProps = ComponentProps<"div">;
-export type ButtonProps = ComponentProps<"button">;
-export type InputProps = ComponentProps<"input">;
-export type LabelProps = ComponentProps<"label">;
+export type ComponentPropsWithRef<T extends React.ElementType> = React.ComponentPropsWithRef<T>;
 
-export type TableProps = ComponentProps<"table">;
-export type TheadProps = ComponentProps<"thead">;
-export type TrProps = ComponentProps<"tr">;
-export type ThProps = ComponentProps<"th">;
-export type TdProps = ComponentProps<"td">;
+export type DivProps = ComponentPropsWithRef<"div">;
+export type ButtonProps = ComponentPropsWithRef<"button">;
+export type InputProps = ComponentPropsWithRef<"input">;
+export type LabelProps = ComponentPropsWithRef<"label">;
+
+export type TableProps = ComponentPropsWithRef<"table">;
+export type TheadProps = ComponentPropsWithRef<"thead">;
+export type TrProps = ComponentPropsWithRef<"tr">;
+export type ThProps = ComponentPropsWithRef<"th">;
+export type TdProps = ComponentPropsWithRef<"td">;
