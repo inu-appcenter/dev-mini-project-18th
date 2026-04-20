@@ -98,12 +98,12 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
     const actions = useDialog(useShallow((store) => store.actions));
 
     const { data, isLoading, isError, error, isRefetching } = usePosts(
-        dayjs(date).add(indexParam, "day").format(DateFormat1),
+        dayjs(date).add(indexParam-4, "day").format(DateFormat1),
     );
 
     const showLoading = isLoading || isRefetching;
 
-    //로딩 중일 때만 점 애니메이션 (원래는 조건이 반대로 걸려 있어 로딩 종료 후에도 주기적으로 리렌더되던 버그)
+    //로딩 중일 때만 점 애니메이션
     const [loadingCnt, setLoadingCnt] = useState(1);
     useEffect(() => {
         if (!showLoading) return;
@@ -113,14 +113,14 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
         return () => clearTimeout(timer);
     }, [loadingCnt, showLoading]);
 
-    //optimistic update용 local items — 서버 응답으로 초기화
+    //optimistic update용 local items 
     const [items, setItems] = useState<TodoI[]>([]);
     useEffect(() => {
         if (data === undefined) return;
         setItems(data);
     }, [data]);
 
-    //done/todo 분리 및 정렬은 items·direction으로부터 파생 (중복 state 제거)
+    //done/todo 분리 및 정렬은 items으로부터 파생
     const { done, todo } = useMemo(() => {
         const n = direction ? 1 : -1;
         const compare = (a: TodoI, b: TodoI) => (a.createdAt.isBefore(b.createdAt) ? 1 : -1) * n;
@@ -153,14 +153,15 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
     );
 
     const onRmBtnClick = useCallback(async () => {
+        actions.setOpen(false);
         if (rmId === null) return;
+
         setItems((prev) => prev.filter((it) => it.id !== rmId));
         try {
             await axios.delete(`/api/proxy/todos/${rmId}`);
         } catch (err) {
             console.error("delete api에서 오류남.", err);
         }
-        actions.setOpen(false);
     }, [rmId, actions]);
 
     if (showLoading) {
