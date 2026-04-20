@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
 
     if (pathname === "/" || pathname === "/read" || pathname === "/read/") {
         const url = req.nextUrl.clone();
-        url.pathname = `/read/${dayjs().format(DateFormat1)}/0`;
+        url.pathname = `/read/${dayjs().format(DateFormat1)}/4`;
         return NextResponse.rewrite(url);
     }
 

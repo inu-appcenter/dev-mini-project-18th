@@ -85,7 +85,7 @@ function ModifyInner() {
     return (
         <>
             <Head>
-                <title>할 일 수정 - {content}</title>
+                <title>할 일 수정 - {contentParams}</title>
             </Head>
 
             <header className="flex w-full items-center px-3 py-6 shadow-md">
@@ -97,7 +97,9 @@ function ModifyInner() {
                 >
                     <ArrowBackIcon />
                 </Button>
-                <div className="text-xl font-semibold whitespace-nowrap">할 일 추가</div>
+                <div className="text-xl font-semibold whitespace-nowrap">
+                    할 일 수정 - {contentParams}
+                </div>
             </header>
 
             <main className="Main mt-6 items-start px-8">
