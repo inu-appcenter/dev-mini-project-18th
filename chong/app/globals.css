@@ -12,6 +12,7 @@
     --important-task-color: #d65a5e;
     --meeting-task-color: #8eca89;
     --study-task-color: #f7e096;
+    --is-mobile: true;
 }
 
 @theme inline {
@@ -24,6 +25,7 @@
     --important-task-color: var(--important-task-color);
     --metting-task-color: var(--meeting-task-color);
     --study-task-color: var(--study-task-color);
+    --is-mobile: var(--is-mobile);
 }
 
 @theme {
@@ -71,11 +73,15 @@ body {
     padding: 0;
 }
 
-@media (width >= 40rem) {
+@media (width >= 48rem) {
     body {
         max-width: 30vw;
         min-width: 30vw;
         width: 30vw;
+    }
+
+    :root {
+        --is-mobile: false;
     }
 }
 
