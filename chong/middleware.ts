@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import "dayjs/locale/ko";
-import dayjs from "@constants/dayjs";
+import dayjs from "@constants/Date";
 import { DateFormat1 } from "@/constants/Date";
 
 export function middleware(req: NextRequest) {
@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
 
     if (pathname === "/" || pathname === "/read" || pathname === "/read/") {
         const url = req.nextUrl.clone();
-        url.pathname = `/read/${dayjs().format(DateFormat1)}/4`;
+        url.pathname = `/read/${dayjs().format(DateFormat1)}/0`;
         return NextResponse.rewrite(url);
     }
 

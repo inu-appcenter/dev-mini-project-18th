@@ -7,7 +7,7 @@ import Link from "next/link";
 import Header from "./Header";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import dayjs from "@constants/dayjs";
+import dayjs from "@constants/Date";
 import { DateFormat1 } from "@/constants/Date";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     let pathname = usePathname();
     if (pathname === "/") {
-        pathname = `/read/${dayjs().format(DateFormat1)}/4`;
+        pathname = `/read/${dayjs().format(DateFormat1)}/0`;
     }
     let pathnames = pathname.split("/");
     let date = dayjs(pathnames[2]);

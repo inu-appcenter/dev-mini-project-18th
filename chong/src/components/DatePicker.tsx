@@ -1,7 +1,7 @@
 "use client";
 import { ButtonProps, DivProps, InputProps } from "@/types/Props";
 import Button from "./Button";
-import dayjs from "@constants/dayjs";
+import dayjs from "@constants/Date";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { KorDateAry } from "@constants/Date";
 import CalenderIcon from "@images/Calender.svg";
