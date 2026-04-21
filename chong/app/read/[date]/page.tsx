@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import dayjs from "@constants/dayjs";
+import dayjs from "@constants/Date";
 import { DateFormat1 } from "@/constants/Date";
 
 export default async function Read({ params }: { params: Promise<{ date: string }> }) {

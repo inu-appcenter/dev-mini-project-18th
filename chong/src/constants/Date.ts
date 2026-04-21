@@ -1,3 +1,12 @@
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+dayjs.locale("ko");
+
+export type Dayjs = dayjs.Dayjs;
+export default dayjs;
+export { dayjs };
+
 /**DateFormat: Dayjs객체를 string으로 변환하기 위해 사용
  * 사용법 : dayjs().format(DateFormat)
  * 사용하는 이유 : 나중에 위 형식으로 변환된 string을 dayjs함수에 넘겨줄 경우
@@ -7,3 +16,4 @@
 export const DateFormat1 = "YYYY-MM-DD" as const;
 //dayjs.Dayjs객체의 day메서드의 반환값(0~6)을 한국어 요일로 바꾸기 위해 사용
 export const KorDateAry = ["일", "월", "화", "수", "목", "금", "토"] as const;
+

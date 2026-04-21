@@ -18,13 +18,11 @@ import { useShallow } from "zustand/shallow";
 import { Dialog } from "./Dialog";
 import { DateFormat1 } from "@/constants/Date";
 import { usePosts } from "@/hooks/usePosts";
-import dayjs from "@constants/dayjs";
 import axios from "redaxios";
 import clsx from "clsx";
 
 interface TodoListProps extends DivProps {
     date: string;
-    index: number;
 }
 
 interface TodoItemProps {
@@ -91,15 +89,13 @@ const TodoItem = memo(({ item, onToggle, onDelete }: TodoItemProps) => {
 });
 TodoItem.displayName = "TodoItem";
 
-export default function TodoList({ date, index: indexParam, ...rest }: TodoListProps) {
+export default function TodoList({ date, ...rest }: TodoListProps) {
     //정렬 방향 — false: 최신순(내림차순), true: 오름차순
     const [direction, setDirection] = useState<boolean>(false);
 
     const actions = useDialog(useShallow((store) => store.actions));
 
-    const { data, isLoading, isError, error, isRefetching } = usePosts(
-        dayjs(date).add(indexParam-4, "day").format(DateFormat1),
-    );
+    const { data, isLoading, isError, error, isRefetching } = usePosts(date);
 
     const showLoading = isLoading || isRefetching;
 
@@ -113,7 +109,7 @@ export default function TodoList({ date, index: indexParam, ...rest }: TodoListP
         return () => clearTimeout(timer);
     }, [loadingCnt, showLoading]);
 
-    //optimistic update용 local items 
+    //optimistic update용 local items
     const [items, setItems] = useState<TodoI[]>([]);
     useEffect(() => {
         if (data === undefined) return;
