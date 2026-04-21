@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { useShallow } from "zustand/shallow";
 import { KorDateAry } from "@/constants/Date";
 import clsx from "clsx";
 
