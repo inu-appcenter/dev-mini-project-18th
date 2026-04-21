@@ -1,27 +1,25 @@
 "use client";
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import dayjs from "@constants/dayjs";
+import dayjs from "@constants/Date";
 import { DateFormat1, KorDateAry } from "@/constants/Date";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
 interface Props {
-    date: dayjs.Dayjs;
+    date: string;
     index: number;
 }
 
-// 총 13개. 앞에서 5번째(index 4)가 기준 날짜가 되도록 배치한다.
-// [-4, -3, -2, -1, date, +1, +2, +3, +4, +5, +6, +7, +8]
 const ARY_LEN = 13;
 const VISIBLE_COUNT = 5; // 한 화면에 보이는 칸 수
 const ANCHOR_INDEX = 4; // 왼쪽 첫 칸으로 보여야 하는 ary index (5번째 요소)
 const CLICK_THRESHOLD_PX = 5; // click으로 간주할 최대 이동량(px)
 const SETTLE_MS = 220;
 
-function initialAry(date: dayjs.Dayjs): dayjs.Dayjs[] {
+function initialAry(date: dayjs.Dayjs, index: number): dayjs.Dayjs[] {
     const res: dayjs.Dayjs[] = [];
     for (let i = 0; i < ARY_LEN; ++i) {
-        res[i] = date.add(i - ANCHOR_INDEX, "day");
+        res[i] = date.add(i - ANCHOR_INDEX - index, "day");
     }
     return res;
 }
@@ -68,7 +66,7 @@ DateCell.displayName = "DateCell";
 export default function DateDial({ date, index }: Props) {
     const router = useRouter();
 
-    const [ary, setAry] = useState<dayjs.Dayjs[]>(() => initialAry(date));
+    const [ary, setAry] = useState<dayjs.Dayjs[]>(() => initialAry(dayjs(date), index));
     // settle/클릭 핸들러가 항상 최신 ary를 볼 수 있도록 ref로도 보관
     const aryRef = useRef<dayjs.Dayjs[]>(ary);
     aryRef.current = ary;
@@ -81,13 +79,13 @@ export default function DateDial({ date, index }: Props) {
     // ary가 shift된 누적 칸 수. 시각적 이동에서 보정할 때 사용
     const shiftedRef = useRef<number>(0);
     const indexRef = useRef(index);
-    indexRef.current = index;
 
     // itemWidth / anchorScrollLeft를 매 pointer move마다 읽으면 clientWidth 접근으로
     // 레이아웃이 강제 발생(reflow). pointerDown, resize, mount 시점에만 측정해 캐시
     const itemWidthRef = useRef<number>(0);
     const anchorScrollLeftRef = useRef<number>(0);
 
+    //rAf: requestAnimationFrame
     // rAF 기반 delta 누적. 여러 pointer move 이벤트를 1프레임에 묶어 처리.
     const pendingDxRef = useRef<number>(0);
     const rafIdRef = useRef<number | null>(null);
@@ -153,7 +151,7 @@ export default function DateDial({ date, index }: Props) {
                 // 원래 위치로 부드럽게 복귀
                 el.scrollTo({ left: anchor, behavior: "smooth" });
                 router.push(
-                    `/read/${aryRef.current[ANCHOR_INDEX].format(DateFormat1)}/${curIndex}`,
+                    `/read/${aryRef.current[ANCHOR_INDEX+curIndex].format(DateFormat1)}/${curIndex}`,
                 );
                 return;
             }
@@ -174,7 +172,7 @@ export default function DateDial({ date, index }: Props) {
                 const next = prev.map((d) => d.add(dir, "day"));
                 aryRef.current = next;
                 setAry(next);
-                router.push(`/read/${next[ANCHOR_INDEX].format(DateFormat1)}/${curIndex}`);
+                router.push(`/read/${next[ANCHOR_INDEX+curIndex].format(DateFormat1)}/${curIndex}`);
             }, SETTLE_MS);
         },
         [router],
@@ -270,11 +268,10 @@ export default function DateDial({ date, index }: Props) {
                 const clickedAryIndex = ANCHOR_INDEX + clickedVisible;
                 const curAry = aryRef.current;
                 const d = curAry[clickedAryIndex];
-                if (d) {
-                    router.push(
-                        `/read/${curAry[ANCHOR_INDEX].format(DateFormat1)}/${clickedAryIndex}`,
-                    );
+                for(const d of curAry) {
+                    console.log(d.format(DateFormat1));
                 }
+                router.push(`/read/${d.format(DateFormat1)}/${clickedVisible}`);
                 return;
             }
             settle(el);
@@ -326,7 +323,7 @@ export default function DateDial({ date, index }: Props) {
             onPointerCancel={onPointerCancelOrLeave}
         >
             {ary.map((d, i) => (
-                <DateCell key={d.toString()} day={d} selected={index === i} />
+                <DateCell key={d.toString()} day={d} selected={index+4 === i} />
             ))}
         </div>
     );
