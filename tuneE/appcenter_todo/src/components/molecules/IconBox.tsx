@@ -1,6 +1,6 @@
 'use client';
 import { CheckSquare, Square, SquarePen, X } from 'lucide-react';
-import { useSetTodos } from '@/store/useTodoStore';
+import { useSelectedDate, useSetTodos } from '@/store/useTodoStore';
 import Link from 'next/link';
 import {
   Dialog,
@@ -27,7 +27,9 @@ const IconBox = ({
   completed,
 }: IconBoxProps) => {
   const setTodos = useSetTodos();
-  // Delete 메서드 요청 보내는 로직
+  const selectedDate = useSelectedDate();
+
+  // DELETE  요청 보내는 로직
   const handleDelete = async () => {
     try {
       // 서버에 특정 할 일 삭제 요청 (DELETE 메서드)
@@ -37,7 +39,9 @@ const IconBox = ({
       if (deleteResponse.ok) {
         console.log(`${id}번 Todo 삭제 완료!`);
         // 삭제 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
-        const getResponse = await fetch('/todos');
+        const getResponse = await fetch(
+          `/todos?sort=createdAt&date=${selectedDate}`
+        );
         const updatedTodos = await getResponse.json();
 
         // 다시 가져온 데이터를 Zustand 스토어에 초기화
@@ -54,13 +58,10 @@ const IconBox = ({
   const handleToggleComplete = async () => {
     try {
       // 서버에 특정 할 일 완료 설정 (PATCH 메서드)
-      const patchResponse = await fetch(`/todos/${id}`, {
+      const patchResponse = await fetch(`/todos/${id}/completed`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content,
-          dueDate,
-          category,
           completed: !completed,
         }),
       });
@@ -72,7 +73,9 @@ const IconBox = ({
         }
 
         // 완료 요청(데이터 수정 요청) 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
-        const getResponse = await fetch('/todos');
+        const getResponse = await fetch(
+          `/todos?sort=createdAt&date=${selectedDate}`
+        );
         const updatedTodos = await getResponse.json();
 
         // 다시 가져온 데이터를 Zustand 스토어에 초기화

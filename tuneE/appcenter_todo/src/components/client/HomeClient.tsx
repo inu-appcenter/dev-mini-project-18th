@@ -3,7 +3,11 @@ import HeaderLayout from '@/components/templates/HeaderLayout';
 import MainLayout from '@/components/templates/MainLayout';
 import AddTodoButton from '@/components/atoms/AddButton';
 import { useState, useEffect } from 'react';
-import { TodoInterface, useSetTodos } from '@/store/useTodoStore';
+import {
+  TodoInterface,
+  useSetTodos,
+  useSelectedDate,
+} from '@/store/useTodoStore';
 
 type HomeClientProps = {
   Todos: TodoInterface[];
@@ -13,9 +17,8 @@ const HomeClient = ({ Todos }: HomeClientProps) => {
   // 스크롤 상태는 해당 컴포넌트에서만 사용하므로 굳이 전역적으로 다루지 않음
   const [isScrolled, setIsScrolled] = useState(false);
   const setTodos = useSetTodos();
+  const selectedDate = useSelectedDate();
 
-  // useEffect()는 렌더링이 되고 나서 실행되므로 서버 컴포넌트를 도입한 이유가 없다..
-  // SSR의 장점을 최대한 살리는 방향을 찾아야 함
   // tanstack Query 도입 예정
   useEffect(() => {
     setTodos(Todos);

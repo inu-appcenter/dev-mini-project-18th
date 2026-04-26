@@ -41,7 +41,6 @@ const Page = () => {
           content: content,
           dueDate: date,
           category: clickedCategory,
-          // completed: -> 현재 수정 페이지의 입력 폼에서 설정할 수 있는 방법이 없음
         }),
       });
       if (response.ok) {
