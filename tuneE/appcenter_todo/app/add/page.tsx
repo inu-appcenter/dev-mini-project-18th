@@ -92,8 +92,8 @@ const Page = () => {
                   className={cn(
                     clickedCategory === 'IMPORTANT'
                       ? 'bg-importantThing border-transparent text-white'
-                      : 'bg-bg-primary',
-                    'text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
                   )}
                 >
                   {' '}
@@ -114,8 +114,8 @@ const Page = () => {
                   className={cn(
                     clickedCategory === 'MEETING'
                       ? 'bg-meeting border-transparent text-white'
-                      : 'bg-bg-primary',
-                    'border-stroke-primary text-text-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
                   )}
                 >
                   {clickedCategory === 'MEETING' ? (
@@ -135,8 +135,8 @@ const Page = () => {
                   className={cn(
                     clickedCategory === 'STUDY'
                       ? 'bg-study border-transparent text-white'
-                      : 'bg-bg-primary',
-                    'text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
                   )}
                 >
                   {clickedCategory === 'STUDY' ? (

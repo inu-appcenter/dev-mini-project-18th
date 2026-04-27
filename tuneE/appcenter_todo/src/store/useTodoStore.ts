@@ -1,6 +1,16 @@
 import { create } from 'zustand';
 import { format } from 'date-fns';
 
+export interface SplashStoreInterface {
+  hasShownSplash: boolean;
+  setHasShownSplash: () => void;
+}
+
+export const useSplashStore = create<SplashStoreInterface>((set) => ({
+  hasShownSplash: false, // 새로고침하면 false로 리셋됨
+  setHasShownSplash: () => set({ hasShownSplash: true }),
+}));
+
 export interface TodoInterface {
   id: number;
   content: string;
