@@ -1,10 +1,8 @@
 'use client';
 import { format } from 'date-fns';
 import { color } from '@/types/color';
-// AnimatePresence는 렌더링 부하가 큼
 // framer-motion 에서 motion/react로 변경됨 (용량최적화, 구조분리)
 import { motion, Transition } from 'motion/react';
-import { useTodoStore } from '@/store/useTodoStore';
 import DateContentDirection from '../atoms/DateContentDirection';
 
 interface DateContentSectionProps {

@@ -2,7 +2,7 @@
 import { ChevronLeft } from 'lucide-react';
 import { TodoContentCategory } from '@/types/color';
 import { useState } from 'react';
-import FormField from '@/components/atoms/FromField';
+import FormField from '@/components/atoms/FormField';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
