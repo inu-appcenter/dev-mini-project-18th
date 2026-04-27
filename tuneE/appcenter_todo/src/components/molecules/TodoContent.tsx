@@ -13,7 +13,7 @@ interface TodoContentProps {
 const TodoContent = (props: TodoContentProps) => {
   return (
     <div className="relative flex items-center justify-between px-8">
-      <div className="border-stroke-primary flex items-center justify-center gap-5 border-l border-dashed">
+      <div className="flex items-center justify-center gap-5">
         {/* 할 일 제목 */}
         <TextBox
           content={props.content}

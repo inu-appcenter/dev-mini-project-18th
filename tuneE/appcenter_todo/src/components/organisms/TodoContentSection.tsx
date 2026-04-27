@@ -30,10 +30,7 @@ const TodoContentSection = () => {
     updateTodos();
   }, [selectedDate]);
 
-  // todos는 쿼리파라미터(date)를 통해서 백엔드 쪽에서 날짜에 맞게 걸러준 데이터
-
   // todos 데이터를 isAscending을 기준으로 내림차순/오름차순 정렬 (단, 이때 완료된 할 일은 빗금치고 맨 밑으로 보내도록)
-
   const sortedTodos =
     // 원본배열이 수정되는 것을 방지하기 위해 스프레드 연산자로 새로운 배열 생성
     [...todos].sort((a, b) => {
@@ -49,11 +46,10 @@ const TodoContentSection = () => {
 
   return (
     <div className="w-full">
-      {/* sortedTodos를 선택된 날짜와 일치하는 것들만 뿌려주기 */}
       {sortedTodos.map((todo) => (
         <TodoContent key={todo.id} {...todo} />
       ))}
-      {/* 선택된 날짜와 일치하는 데이터가 없을 때의 예외처리 */}
+
       {sortedTodos.length === 0 && (
         <div className="flex h-40 items-center justify-center">
           <p className="text-text-secondary">해당 날짜에 일정이 없습니다.</p>
