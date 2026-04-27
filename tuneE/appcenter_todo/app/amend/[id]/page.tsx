@@ -3,24 +3,37 @@
 'use client';
 import { ChevronLeft } from 'lucide-react';
 import { TodoContentCategory } from '@/types/color';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FormField from '@/components/atoms/FormField';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useTodos } from '@/store/useTodoStore';
 import { cn } from '@/lib/utils';
+import { useGetTodos, useUpdateTodo } from '@/hooks/useTodosQuery';
+import { useSelectedDate } from '@/store/useTodoStore';
 {
   /* 모든 폼을 다 채워야만 제출가능 및 버튼이 brand-color로 바뀜 */
 }
 const Page = () => {
   const router = useRouter();
   const { id } = useParams();
-  const TargetTodo = useTodos().find((todo) => todo.id === Number(id));
+
+  const selectedDate = useSelectedDate();
+  const { data: todos = [] } = useGetTodos(selectedDate);
+  const TargetTodo = todos.find((todo) => todo.id === Number(id));
   console.log(TargetTodo);
   const [clickedCategory, setClickedCategory] = useState(TargetTodo?.category);
-  const [content, setContent] = useState(TargetTodo?.content);
-  const [date, setDate] = useState(TargetTodo?.dueDate);
+  const [content, setContent] = useState('');
+  const [date, setDate] = useState('');
+  const updateMutation = useUpdateTodo();
+
+  useEffect(() => {
+    if (TargetTodo) {
+      setContent(TargetTodo.content);
+      setDate(TargetTodo.dueDate);
+      setClickedCategory(TargetTodo.category);
+    }
+  }, [TargetTodo]);
 
   const changeCategoryContent = (content: TodoContentCategory) => {
     setClickedCategory(content);
@@ -34,27 +47,18 @@ const Page = () => {
 
   // 수정버튼 클릭 시 PATCH 요청 보내는 함수
   const amendTargetTodo = async () => {
-    try {
-      const response = await fetch(`/todos/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content,
-          dueDate: date,
-          category: clickedCategory,
-        }),
-      });
-      if (response.ok) {
-        // 성공 시 이전 화면으로 이동
-        router.push('/');
-        router.refresh();
-      } else {
-        console.log(response);
-        alert('할 일 수정에 실패했습니다.');
+    if (!isFormValid) return;
+
+    updateMutation.mutate(
+      {
+        id: Number(id),
+        body: { content, dueDate: date, category: clickedCategory },
+      },
+      {
+        onSuccess: () => router.push('/'),
+        onError: () => alert('할 일 수정에 실패했습니다.'),
       }
-    } catch (error) {
-      console.log('API 요청 에러: ', error);
-    }
+    );
   };
   return (
     <>

@@ -3,6 +3,7 @@ import './globals.css';
 import localFont from 'next/font/local';
 import { Geist } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import QueryProvider from '@/provider/QueryProvider';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -57,7 +58,7 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

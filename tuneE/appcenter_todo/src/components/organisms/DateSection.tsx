@@ -71,16 +71,24 @@ const DateSection = () => {
                 key={dayString}
                 onClick={() => setSelectedDate(dayString)}
                 className={cn(
-                  isSelected
-                    ? 'bg-brand-color text-[#ffffff]'
-                    : 'text-text-secondary bg-transparent',
+                  isSelected && 'bg-brand-color text-[#ffffff]',
                   'flex h-16.5 flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-t-lg transition-colors'
                 )}
               >
-                <span className="font-Medium text-sm">
+                <span
+                  className={cn(
+                    isSelected ? 'bg-transparent' : 'text-text-secondary',
+                    'font-Medium text-sm'
+                  )}
+                >
                   {format(day, 'EEE', { locale: ko })}
                 </span>
-                <span className="font-SemiBold text-base">
+                <span
+                  className={cn(
+                    isSelected ? 'bg-transparent' : 'text-text-primar',
+                    'font-SemiBold text-base'
+                  )}
+                >
                   {format(day, 'd')}
                 </span>
               </div>

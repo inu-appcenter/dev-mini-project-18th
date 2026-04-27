@@ -4,13 +4,16 @@ import TodoContentSection from '../organisms/TodoContentSection';
 import {
   useToggleSortOrder,
   useIsAscending,
-  useTodos,
+  useSelectedDate,
 } from '@/store/useTodoStore';
+import { useGetTodos } from '@/hooks/useTodosQuery';
 
 const MainLayout = () => {
   const isAscending = useIsAscending(); // 초깃값은 false
   const toggleSortOrder = useToggleSortOrder(); // isAscending 상태를 toggle 해주는 커스텀 훅
-  const todos = useTodos();
+  // const todos = useTodos();
+  const selectedDate = useSelectedDate();
+  const { data: todos = [] } = useGetTodos(selectedDate);
   const hasTodos = todos.length > 0;
 
   return (

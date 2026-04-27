@@ -1,34 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
 import TodoContent from '../molecules/TodoContent';
-import {
-  useIsAscending,
-  useTodos,
-  useSelectedDate,
-  useSetTodos,
-} from '@/store/useTodoStore';
+import { useIsAscending, useSelectedDate } from '@/store/useTodoStore';
+import { useGetTodos } from '@/hooks/useTodosQuery';
 
 const TodoContentSection = () => {
-  const todos = useTodos();
-  const setTodos = useSetTodos();
   const selectedDate = useSelectedDate();
   const isAscending = useIsAscending();
+  const { data: todos = [], isLoading, isError } = useGetTodos(selectedDate);
 
-  // 선택된 날짜가 변경되었을 시, api 재요청
-  useEffect(() => {
-    const updateTodos = async () => {
-      const response = await fetch(
-        `/todos?sort=createdAt&date=${selectedDate}`
-      );
-      if (response.ok) {
-        const newTodos = await response.json();
-        setTodos(newTodos);
-      }
-      console.log(todos);
-    };
-    updateTodos();
-  }, [selectedDate]);
+  if (isLoading) {
+    return (
+      <div className="flex h-40 items-center justify-center">
+        <p className="text-text-secondary">불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-40 items-center justify-center">
+        <p className="text-text-secondary">데이터를 불러오지 못했습니다.</p>
+      </div>
+    );
+  }
 
   // todos 데이터를 isAscending을 기준으로 내림차순/오름차순 정렬 (단, 이때 완료된 할 일은 빗금치고 맨 밑으로 보내도록)
   const sortedTodos =

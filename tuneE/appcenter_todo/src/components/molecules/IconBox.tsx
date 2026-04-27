@@ -1,6 +1,8 @@
 'use client';
 import { CheckSquare, Square, SquarePen, X } from 'lucide-react';
-import { useSelectedDate, useSetTodos } from '@/store/useTodoStore';
+// import { useSelectedDate, useSetTodos } from '@/store/useTodoStore';
+import { useDeleteTodo, useToggleCompleted } from '@/hooks/useTodosQuery';
+
 import Link from 'next/link';
 import {
   Dialog,
@@ -19,74 +21,38 @@ interface IconBoxProps {
   completed: boolean;
 }
 
-const IconBox = ({
-  id,
-  content,
-  dueDate,
-  category,
-  completed,
-}: IconBoxProps) => {
-  const setTodos = useSetTodos();
-  const selectedDate = useSelectedDate();
+const IconBox = ({ id, completed }: IconBoxProps) => {
+  // const setTodos = useSetTodos();
+  // const selectedDate = useSelectedDate();
+  const deleteMutation = useDeleteTodo();
+  const toggleMutation = useToggleCompleted();
 
   // DELETE  요청 보내는 로직
   const handleDelete = async () => {
-    try {
-      // 서버에 특정 할 일 삭제 요청 (DELETE 메서드)
-      const deleteResponse = await fetch(`/todos/${id}`, {
-        method: 'DELETE',
-      });
-      if (deleteResponse.ok) {
-        console.log(`${id}번 Todo 삭제 완료!`);
-        // 삭제 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
-        const getResponse = await fetch(
-          `/todos?sort=createdAt&date=${selectedDate}`
-        );
-        const updatedTodos = await getResponse.json();
-
-        // 다시 가져온 데이터를 Zustand 스토어에 초기화
-        setTodos(updatedTodos);
-      } else {
-        console.error('삭제에 실패했습니다.');
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        console.log(`${id}번 Todo 삭제 완료`);
+      },
+      onError: () => {
         alert('삭제에 실패했습니다. 다시 시도해주세요.');
-      }
-    } catch (error) {
-      console.error('API 요청 중 에러 발생:', error);
-    }
+      },
+    });
   };
 
   const handleToggleComplete = async () => {
-    try {
-      // 서버에 특정 할 일 완료 설정 (PATCH 메서드)
-      const patchResponse = await fetch(`/todos/${id}/completed`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          completed: !completed,
-        }),
-      });
-      if (patchResponse.ok) {
-        if (!completed) {
-          console.log(`id:${id} Todo 완료 설정 성공`);
-        } else {
-          console.log(`id:${id} Todo 미완료 설정 성공`);
-        }
-
-        // 완료 요청(데이터 수정 요청) 성공 시, 서버에서 최신 할 일 목록을 다시 가져옴(GET)
-        const getResponse = await fetch(
-          `/todos?sort=createdAt&date=${selectedDate}`
-        );
-        const updatedTodos = await getResponse.json();
-
-        // 다시 가져온 데이터를 Zustand 스토어에 초기화
-        setTodos(updatedTodos);
-      } else {
-        console.error('할일 완료 설정에 실패했습니다.');
-        alert('할일 완료 설정에 실패했습니다. 다시 시도해주세요.');
+    toggleMutation.mutate(
+      { id, completed: !completed },
+      {
+        onSuccess: (updatedTodo) => {
+          console.log(
+            `id:${id} Todo ${!completed ? '완료' : '미완료'} 설정 성공`
+          );
+        },
+        onError: () => {
+          alert('완료 설정에 실패했습니다. 다시 시도해주세요.');
+        },
       }
-    } catch (error) {
-      console.error('API 요청 중 에러 발생:', error);
-    }
+    );
   };
 
   return (

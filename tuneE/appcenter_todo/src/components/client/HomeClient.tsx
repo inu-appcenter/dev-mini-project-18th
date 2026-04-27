@@ -9,20 +9,20 @@ import {
   useSelectedDate,
 } from '@/store/useTodoStore';
 
-type HomeClientProps = {
-  Todos: TodoInterface[];
-};
+// type HomeClientProps = {
+//   Todos: TodoInterface[];
+// };
 
-const HomeClient = ({ Todos }: HomeClientProps) => {
+const HomeClient = () => {
   // 스크롤 상태는 해당 컴포넌트에서만 사용하므로 굳이 전역적으로 다루지 않음
   const [isScrolled, setIsScrolled] = useState(false);
-  const setTodos = useSetTodos();
-  const selectedDate = useSelectedDate();
+  // const setTodos = useSetTodos();
+  // const selectedDate = useSelectedDate();
 
   // tanstack Query 도입 예정
-  useEffect(() => {
-    setTodos(Todos);
-  }, [Todos]);
+  // useEffect(() => {
+  //   setTodos(Todos);
+  // }, [Todos]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>): void => {
     setIsScrolled(e.currentTarget.scrollTop > 0);

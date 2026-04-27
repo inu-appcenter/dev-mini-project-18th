@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useCreateTodo } from '@/hooks/useTodosQuery';
 
 {
   /* 모든 폼을 다 채워야만 제출가능 및 버튼이 brand-color로 바뀜 */
@@ -19,30 +20,21 @@ const Page = () => {
   const changeCategoryContent = (content: TodoContentCategory) => {
     setClickedCategory(content);
   };
+  const createMutation = useCreateTodo();
 
   // 추가버튼 클릭시 POST 요청
   const sendTodoData = async () => {
-    try {
-      const response = await fetch('/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content,
-          dueDate: date,
-          category: clickedCategory,
-        }),
-      });
-      if (response.ok) {
-        // 성공 시 이전 화면으로 이동
-        router.push('/');
-        router.refresh();
-      } else {
-        console.log(response.status, response.statusText);
-        alert('할 일 추가에 실패했습니다.');
+    createMutation.mutate(
+      { content, dueDate: date, category: clickedCategory },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: () => {
+          alert('할 일 추가에 실패했습니다.');
+        },
       }
-    } catch (error) {
-      console.log('API 요청 에러: ', error);
-    }
+    );
   };
 
   // 폼 입력값 체크
