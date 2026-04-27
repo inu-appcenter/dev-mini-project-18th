@@ -1,5 +1,6 @@
 'use client';
 import { TodoContentCategory } from '../../types/color';
+import { cn } from '@/lib/utils';
 
 interface TextBoxProps {
   content: string;
@@ -22,10 +23,19 @@ const TextBox = ({ content, category, completed }: TextBoxProps) => {
     <div className="flex items-center gap-2 px-5 py-6">
       {/* 카테고리에 맞는 색깔을 가진 원 */}
       <div
-        className={`${roundColor} absolute left-7 h-2.25 w-2.25 shrink-0 rounded-full ${completed ? 'opacity-40' : ''}`}
+        className={cn(
+          roundColor,
+          'absolute left-7 h-2.25 w-2.25 shrink-0 rounded-full',
+          completed && 'opacity-40'
+        )}
       />
       <p
-        className={`font-SemiBold text-lg leading-7 ${completed ? 'text-text-secondary line-through opacity-60' : 'text-text-primary'} `}
+        className={cn(
+          'font-SemiBold text-lg leading-7',
+          completed
+            ? 'text-text-secondary line-through opacity-60'
+            : 'text-text-primary'
+        )}
       >
         {content}
       </p>

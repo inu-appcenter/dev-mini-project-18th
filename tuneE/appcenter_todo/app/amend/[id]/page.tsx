@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useTodos } from '@/store/useTodoStore';
+import { cn } from '@/lib/utils';
 {
   /* 모든 폼을 다 채워야만 제출가능 및 버튼이 brand-color로 바뀜 */
 }
@@ -83,9 +84,10 @@ const Page = () => {
             <FormField title="날짜">
               <input
                 type="date"
-                className={`border-stroke-primary rounded-md border px-2 py-1 font-semibold placeholder:text-[#8B8B8B] focus:ring-2 focus:outline-none ${
+                className={cn(
+                  'border-stroke-primary rounded-md border px-2 py-1 font-semibold placeholder:text-[#8B8B8B] focus:ring-2 focus:outline-none',
                   date ? 'text-text-primary' : 'text-text-secondary'
-                }`}
+                )}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
@@ -94,7 +96,12 @@ const Page = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => changeCategoryContent('IMPORTANT')}
-                  className={`${clickedCategory === 'IMPORTANT' ? 'bg-importantThing border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'IMPORTANT'
+                      ? 'bg-importantThing border-transparent text-white'
+                      : 'bg-bg-primary',
+                    'text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'IMPORTANT' ? (
                     <Image
@@ -110,7 +117,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('MEETING')}
-                  className={`${clickedCategory === 'MEETING' ? 'bg-meeting border-transparent text-white' : 'bg-bg-primary'} border-stroke-primary text-text-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'MEETING'
+                      ? 'bg-meeting border-transparent text-white'
+                      : 'bg-bg-primary',
+                    'border-stroke-primary text-text-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'MEETING' ? (
                     <Image
@@ -126,7 +138,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('STUDY')}
-                  className={`${clickedCategory === 'STUDY' ? 'bg-study border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'STUDY'
+                      ? 'bg-study border-transparent text-white'
+                      : 'bg-bg-primary',
+                    'text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'STUDY' ? (
                     <Image
@@ -153,7 +170,12 @@ const Page = () => {
               <button
                 onClick={amendTargetTodo}
                 disabled={!isFormValid}
-                className={`${isFormValid ? 'bg-brand-color cursor-pointer border-transparent text-white' : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent'} rounded-md border px-4 py-1.5`}
+                className={cn(
+                  isFormValid
+                    ? 'bg-brand-color cursor-pointer border-transparent text-white'
+                    : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent',
+                  'rounded-md border px-4 py-1.5'
+                )}
               >
                 수정
               </button>

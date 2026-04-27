@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { format, addDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useSetSelectedDate, useSelectedDate } from '@/store/useTodoStore';
+import { cn } from '@/lib/utils';
 
 // 상수 설정 (Date 페이지당 날짜 수, 페이지 전환 기준값)
 const DAYS_PER_DATE_PAGE = 5;
@@ -69,11 +70,12 @@ const DateSection = () => {
               <div
                 key={dayString}
                 onClick={() => setSelectedDate(dayString)}
-                className={`${
+                className={cn(
                   isSelected
                     ? 'bg-brand-color text-[#ffffff]'
-                    : 'text-text-secondary bg-transparent'
-                } flex h-16.5 flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-t-lg transition-colors`}
+                    : 'text-text-secondary bg-transparent',
+                  'flex h-16.5 flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-t-lg transition-colors'
+                )}
               >
                 <span className="font-Medium text-sm">
                   {format(day, 'EEE', { locale: ko })}

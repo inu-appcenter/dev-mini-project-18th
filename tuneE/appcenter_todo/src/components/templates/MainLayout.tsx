@@ -15,6 +15,7 @@ const MainLayout = () => {
 
   return (
     <div className="relative">
+      {/* 할 일이 하나라도 있을 때만 구분선(세로 점선) 보이도록 */}
       {hasTodos && (
         <div
           aria-hidden
