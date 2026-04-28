@@ -86,7 +86,7 @@ const DateSection = () => {
                 <span
                   className={cn(
                     isSelected ? 'bg-transparent' : 'text-text-primar',
-                    'font-SemiBold text-base'
+                    'font-SemiBold text-[22px]'
                   )}
                 >
                   {format(day, 'd')}

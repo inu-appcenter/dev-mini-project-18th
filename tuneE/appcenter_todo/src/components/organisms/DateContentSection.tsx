@@ -22,12 +22,11 @@ const DateContentSection = ({ isScrolled }: DateContentSectionProps) => {
         animate={{
           height: isScrolled ? 0 : 24,
           opacity: isScrolled ? 0 : 1,
-          marginBottom: isScrolled ? 0 : 4,
+          marginBottom: isScrolled ? 0 : 14,
         }}
         transition={smoothTransition}
         className="flex justify-center overflow-hidden"
       >
-        {/* Hello!: 24px, Regular(400), 100%(leading-none) */}
         <p className="text-text-secondary font-Regular text-[24px] leading-none whitespace-nowrap">
           Hello!
         </p>
@@ -49,12 +48,12 @@ const DateContentSection = ({ isScrolled }: DateContentSectionProps) => {
           </div>
         ) : (
           // 스크롤 내렸을 때; 휠을 올렸을 때 (세로 모드)
-          <div className="mb-3 flex flex-col items-center gap-1">
+          <div className="mb-3 flex flex-col items-center">
             <DateContentDirection
               dateText={dateText}
               dayText={dayText}
               transition={smoothTransition}
-              dateTextSize={'text-[60px] font-Bold '}
+              dateTextSize={'text-[60px] font-Bold leading-none'}
               dayTextSize={'text-[20px] font-SemiBold leading-none'}
             />
           </div>

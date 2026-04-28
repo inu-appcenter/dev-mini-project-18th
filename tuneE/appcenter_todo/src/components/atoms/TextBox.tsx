@@ -20,7 +20,7 @@ const TextBox = ({ content, category, completed }: TextBoxProps) => {
   const roundColor = categoryColorMap[category];
 
   return (
-    <div className="flex items-center gap-2 px-5 py-6">
+    <div className="flex w-full max-w-[257.25px] items-center gap-2 px-5 py-6">
       {/* 카테고리에 맞는 색깔을 가진 원 */}
       <div
         className={cn(
@@ -29,9 +29,10 @@ const TextBox = ({ content, category, completed }: TextBoxProps) => {
           completed && 'opacity-40'
         )}
       />
+      {/* 할 일 내용 */}
       <p
         className={cn(
-          'font-SemiBold text-lg leading-7',
+          'font-SemiBold text-[24px] leading-7 break-all',
           completed
             ? 'text-text-secondary line-through opacity-60'
             : 'text-text-primary'
