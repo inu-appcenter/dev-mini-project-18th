@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/_global-error/page": "/_global-error",
+  "/api/todos/[id]/completed/route": "/api/todos/[id]/completed",
+  "/api/todos/[id]/route": "/api/todos/[id]",
+  "/api/todos/route": "/api/todos",
+  "/(auth)/login/page": "/login",
+  "/(auth)/signup/page": "/signup",
+  "/add/page": "/add",
+  "/amend/[id]/page": "/amend/[id]",
+  "/page": "/"
+}
