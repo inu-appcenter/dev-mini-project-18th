@@ -1,1 +1,1 @@
-## 앱센터 Todo List 프로젝트
+## 앱센터 Todo List 프로젝트입니다.
