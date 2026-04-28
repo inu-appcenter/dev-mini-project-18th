@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "appcenter-todo", 
+  "name": "dev-mini-project-18th", 
   "main": ".open-next/worker.js", 
-  "compatibility_date": "2024-04-28",
+  "compatibility_date": "2026-04-28",
   "compatibility_flags": [
     "nodejs_compat" 
   ],
