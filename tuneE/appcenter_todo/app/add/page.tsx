@@ -2,10 +2,12 @@
 import { ChevronLeft } from 'lucide-react';
 import { TodoContentCategory } from '@/types/color';
 import { useState } from 'react';
-import FormField from '@/components/atoms/FromField';
+import FormField from '@/components/atoms/FormField';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { useCreateTodo } from '@/hooks/useTodosQuery';
 
 {
   /* 모든 폼을 다 채워야만 제출가능 및 버튼이 brand-color로 바뀜 */
@@ -18,30 +20,21 @@ const Page = () => {
   const changeCategoryContent = (content: TodoContentCategory) => {
     setClickedCategory(content);
   };
+  const createMutation = useCreateTodo();
 
   // 추가버튼 클릭시 POST 요청
   const sendTodoData = async () => {
-    try {
-      const response = await fetch('/todos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content,
-          dueDate: date,
-          category: clickedCategory,
-        }),
-      });
-      if (response.ok) {
-        // 성공 시 이전 화면으로 이동
-        router.push('/');
-        router.refresh();
-      } else {
-        console.log(response.status, response.statusText);
-        alert('할 일 추가에 실패했습니다.');
+    createMutation.mutate(
+      { content, dueDate: date, category: clickedCategory },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+        onError: () => {
+          alert('할 일 추가에 실패했습니다.');
+        },
       }
-    } catch (error) {
-      console.log('API 요청 에러: ', error);
-    }
+    );
   };
 
   // 폼 입력값 체크
@@ -88,7 +81,12 @@ const Page = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => changeCategoryContent('IMPORTANT')}
-                  className={`${clickedCategory === 'IMPORTANT' ? 'bg-importantThing border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'IMPORTANT'
+                      ? 'bg-importantThing border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {' '}
                   {clickedCategory === 'IMPORTANT' ? (
@@ -105,7 +103,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('MEETING')}
-                  className={`${clickedCategory === 'MEETING' ? 'bg-meeting border-transparent text-white' : 'bg-bg-primary'} border-stroke-primary text-text-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'MEETING'
+                      ? 'bg-meeting border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'MEETING' ? (
                     <Image
@@ -121,7 +124,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('STUDY')}
-                  className={`${clickedCategory === 'STUDY' ? 'bg-study border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'STUDY'
+                      ? 'bg-study border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'STUDY' ? (
                     <Image
@@ -148,7 +156,12 @@ const Page = () => {
               <button
                 disabled={!isFormValid}
                 onClick={sendTodoData}
-                className={`${isFormValid ? 'bg-brand-color cursor-pointer border-transparent text-white' : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent'} rounded-md border px-4 py-1.5`}
+                className={cn(
+                  isFormValid
+                    ? 'bg-brand-color cursor-pointer border-transparent text-white'
+                    : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent',
+                  'rounded-md border px-4 py-1.5'
+                )}
               >
                 추가
               </button>

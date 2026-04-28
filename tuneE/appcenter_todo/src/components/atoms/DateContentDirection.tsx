@@ -1,5 +1,6 @@
 'use client';
 import { motion, Transition } from 'motion/react';
+import { cn } from '@/lib/utils';
 type DateContentProps = {
   dateText: string;
   dayText: string;
@@ -20,14 +21,24 @@ const DateContentDirection = ({
       <motion.p
         layoutId="dateText"
         transition={transition}
-        className={`text-brand-color ${dateTextSize} font-Bold whitespace-nowrap`}
+        className={cn(
+          'text-brand-color',
+          dateTextSize,
+          'font-Bold',
+          'whitespace-nowrap'
+        )}
       >
         {dateText}
       </motion.p>
       <motion.p
         layoutId="dayText"
         transition={transition}
-        className={`text-brand-color ${dayTextSize} font-SemiBold whitespace-nowrap`}
+        className={cn(
+          'text-brand-color',
+          dayTextSize,
+          'font-SemiBold',
+          'whitespace-nowrap'
+        )}
       >
         {dayText}
       </motion.p>

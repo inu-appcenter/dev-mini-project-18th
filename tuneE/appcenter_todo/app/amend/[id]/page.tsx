@@ -3,23 +3,37 @@
 'use client';
 import { ChevronLeft } from 'lucide-react';
 import { TodoContentCategory } from '@/types/color';
-import { useState } from 'react';
-import FormField from '@/components/atoms/FromField';
+import { useState, useEffect } from 'react';
+import FormField from '@/components/atoms/FormField';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useTodos } from '@/store/useTodoStore';
+import { cn } from '@/lib/utils';
+import { useGetTodos, useUpdateTodo } from '@/hooks/useTodosQuery';
+import { useSelectedDate } from '@/store/useTodoStore';
 {
   /* 모든 폼을 다 채워야만 제출가능 및 버튼이 brand-color로 바뀜 */
 }
 const Page = () => {
   const router = useRouter();
   const { id } = useParams();
-  const TargetTodo = useTodos().find((todo) => todo.id === Number(id));
+
+  const selectedDate = useSelectedDate();
+  const { data: todos = [] } = useGetTodos(selectedDate);
+  const TargetTodo = todos.find((todo) => todo.id === Number(id));
   console.log(TargetTodo);
   const [clickedCategory, setClickedCategory] = useState(TargetTodo?.category);
-  const [content, setContent] = useState(TargetTodo?.content);
-  const [date, setDate] = useState(TargetTodo?.dueDate);
+  const [content, setContent] = useState('');
+  const [date, setDate] = useState('');
+  const updateMutation = useUpdateTodo();
+
+  useEffect(() => {
+    if (TargetTodo) {
+      setContent(TargetTodo.content);
+      setDate(TargetTodo.dueDate);
+      setClickedCategory(TargetTodo.category);
+    }
+  }, [TargetTodo]);
 
   const changeCategoryContent = (content: TodoContentCategory) => {
     setClickedCategory(content);
@@ -33,28 +47,18 @@ const Page = () => {
 
   // 수정버튼 클릭 시 PATCH 요청 보내는 함수
   const amendTargetTodo = async () => {
-    try {
-      const response = await fetch(`/todos/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content,
-          dueDate: date,
-          category: clickedCategory,
-          // completed: -> 현재 수정 페이지의 입력 폼에서 설정할 수 있는 방법이 없음
-        }),
-      });
-      if (response.ok) {
-        // 성공 시 이전 화면으로 이동
-        router.push('/');
-        router.refresh();
-      } else {
-        console.log(response);
-        alert('할 일 수정에 실패했습니다.');
+    if (!isFormValid) return;
+
+    updateMutation.mutate(
+      {
+        id: Number(id),
+        body: { content, dueDate: date, category: clickedCategory },
+      },
+      {
+        onSuccess: () => router.push('/'),
+        onError: () => alert('할 일 수정에 실패했습니다.'),
       }
-    } catch (error) {
-      console.log('API 요청 에러: ', error);
-    }
+    );
   };
   return (
     <>
@@ -84,9 +88,10 @@ const Page = () => {
             <FormField title="날짜">
               <input
                 type="date"
-                className={`border-stroke-primary rounded-md border px-2 py-1 font-semibold placeholder:text-[#8B8B8B] focus:ring-2 focus:outline-none ${
+                className={cn(
+                  'border-stroke-primary rounded-md border px-2 py-1 font-semibold placeholder:text-[#8B8B8B] focus:ring-2 focus:outline-none',
                   date ? 'text-text-primary' : 'text-text-secondary'
-                }`}
+                )}
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
@@ -95,7 +100,12 @@ const Page = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => changeCategoryContent('IMPORTANT')}
-                  className={`${clickedCategory === 'IMPORTANT' ? 'bg-importantThing border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'IMPORTANT'
+                      ? 'bg-importantThing border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'IMPORTANT' ? (
                     <Image
@@ -111,7 +121,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('MEETING')}
-                  className={`${clickedCategory === 'MEETING' ? 'bg-meeting border-transparent text-white' : 'bg-bg-primary'} border-stroke-primary text-text-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'MEETING'
+                      ? 'bg-meeting border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'MEETING' ? (
                     <Image
@@ -127,7 +142,12 @@ const Page = () => {
                 </button>
                 <button
                   onClick={() => changeCategoryContent('STUDY')}
-                  className={`${clickedCategory === 'STUDY' ? 'bg-study border-transparent text-white' : 'bg-bg-primary'} text-text-primary border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1`}
+                  className={cn(
+                    clickedCategory === 'STUDY'
+                      ? 'bg-study border-transparent text-white'
+                      : 'bg-bg-primary text-text-primary',
+                    'border-stroke-primary flex cursor-pointer gap-1 rounded-xl border px-2 py-1'
+                  )}
                 >
                   {clickedCategory === 'STUDY' ? (
                     <Image
@@ -154,7 +174,12 @@ const Page = () => {
               <button
                 onClick={amendTargetTodo}
                 disabled={!isFormValid}
-                className={`${isFormValid ? 'bg-brand-color cursor-pointer border-transparent text-white' : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent'} rounded-md border px-4 py-1.5`}
+                className={cn(
+                  isFormValid
+                    ? 'bg-brand-color cursor-pointer border-transparent text-white'
+                    : 'bg-stroke-primary text-bg-primary cursor-not-allowed border-transparent',
+                  'rounded-md border px-4 py-1.5'
+                )}
               >
                 수정
               </button>

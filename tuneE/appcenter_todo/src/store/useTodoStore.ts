@@ -1,6 +1,16 @@
 import { create } from 'zustand';
 import { format } from 'date-fns';
 
+export interface SplashStoreInterface {
+  hasShownSplash: boolean;
+  setHasShownSplash: () => void;
+}
+
+export const useSplashStore = create<SplashStoreInterface>((set) => ({
+  hasShownSplash: false, // 새로고침하면 false로 리셋됨
+  setHasShownSplash: () => set({ hasShownSplash: true }),
+}));
+
 export interface TodoInterface {
   id: number;
   content: string;
@@ -11,29 +21,19 @@ export interface TodoInterface {
   updatedAt: string;
 }
 
-interface TodoState {
+interface TodoUIState {
   // state 목록
-  todos: TodoInterface[];
   selectedDate: string;
   isAscending: boolean; // 오름차순&내림차순 상태
 
   // 액션함수
-  setTodos: (todo: TodoInterface[]) => void;
   setSelectedDate: (date: string) => void;
   toggleSortOrder: () => void;
 }
 
-export const useTodoStore = create<TodoState>((set) => ({
-  todos: [],
+export const useTodoStore = create<TodoUIState>((set) => ({
   selectedDate: format(new Date(), 'yyyy-MM-dd'), // 초기값은 오늘로 설정해서 DateSection에서 맨 왼쪽이 활성화되도록
   isAscending: false, // 기본값: 최신순
-
-  // API 데이터 fetch 후 저장
-  // setTodos: (todos) => set({
-  //   todos: todos,
-  // })
-  // 를 아래와 같이 축약 가능 (key와 value의 이름이 같으면 축약 가능)
-  setTodos: (todos) => set({ todos }),
 
   // 날짜 선택 시 정렬 순서를 강제로 최신순(false)으로 초기화
   // 여기서 selectedDate는 포맷팅 안되어 있음!
@@ -45,12 +45,6 @@ export const useTodoStore = create<TodoState>((set) => ({
 
 // 커스텀 훅 설정
 // 컴포넌트에서 커스텀 훅을 사용하면 좋은 점? -> 스토어 내부가 바뀌었을때 스토어 내부만 수정하면 됨
-
-// setTodos 커스텀 훅
-export const useSetTodos = () => {
-  const setTodos = useTodoStore((store) => store.setTodos);
-  return setTodos;
-};
 
 // setSelectedDate 커스텀 훅
 export const useSetSelectedDate = () => {
@@ -68,12 +62,6 @@ export const useIsAscending = () => {
 export const useToggleSortOrder = () => {
   const toggleSortOrder = useTodoStore((store) => store.toggleSortOrder);
   return toggleSortOrder;
-};
-
-// todos 커스텀 훅
-export const useTodos = () => {
-  const todos = useTodoStore((store) => store.todos);
-  return todos;
 };
 
 // selectedDate 커스텀 훅 (YYYY-MM-DD 형식으로 포맷팅 후 반환)
