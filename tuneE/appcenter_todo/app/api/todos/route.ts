@@ -1,7 +1,7 @@
 // GET, POST /api/todos
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.API_URL || 'https://todo-server.inuappcenter.kr/';
+const API_URL = process.env.API_URL ?? 'https://todo-server.inuappcenter.kr';
 
 // GET 요청 /api/todos?date=sort=createdAt&2026-04-28
 export async function GET(request: NextRequest) {

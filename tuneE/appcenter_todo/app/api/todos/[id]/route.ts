@@ -1,7 +1,7 @@
 // PATCH, DELETE /api/todos/[id]
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.API_URL || 'https://todo-server.inuappcenter.kr/';
+const API_URL = process.env.API_URL ?? 'https://todo-server.inuappcenter.kr';
 
 // PATCH 요청 /api/todos/[id]
 export async function PATCH(

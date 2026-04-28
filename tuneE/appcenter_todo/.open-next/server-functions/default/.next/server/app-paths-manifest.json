@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/api/todos/[id]/completed/route": "app/api/todos/[id]/completed/route.js",
+  "/api/todos/[id]/route": "app/api/todos/[id]/route.js",
+  "/api/todos/route": "app/api/todos/route.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(auth)/signup/page": "app/(auth)/signup/page.js",
+  "/add/page": "app/add/page.js",
+  "/amend/[id]/page": "app/amend/[id]/page.js",
+  "/page": "app/page.js"
+}
