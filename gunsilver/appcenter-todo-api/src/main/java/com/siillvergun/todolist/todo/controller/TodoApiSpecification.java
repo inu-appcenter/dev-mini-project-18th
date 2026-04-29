@@ -62,10 +62,50 @@ public interface TodoApiSpecification {
                                     name = "Todo 생성 실패 예시",
                                     value = """
                                             {
-                                              "errorCode": "2",
-                                              "messages": [
-                                                "내용은 필수 입니다"
+                                              "code": 400,
+                                              "name": "INVALID_INPUT_VALUE",
+                                              "message": "요청한 값이 올바르지 않습니다.",
+                                              "errors": [
+                                                "content: 내용은 필수 입니다"
                                               ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "지원하지 않는 HTTP 메서드입니다",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "잘못된 HTTP 메서드 예시",
+                                    value = """
+                                            {
+                                              "code": 405,
+                                              "name": "METHOD_NOT_ALLOWED",
+                                              "message": "지원하지 않는 HTTP 메서드입니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "name": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 오류가 발생했습니다.",
+                                              "errors": null
                                             }
                                             """
                             )
@@ -123,15 +163,74 @@ public interface TodoApiSpecification {
                                     name = "전체 Todo 조회 실패 예시",
                                     value = """
                                             {
-                                              "errorCode": "2",
-                                              "messages": [
-                                                "입력값이 올바르지 않습니다."
+                                              "code": 400,
+                                              "name": "INVALID_INPUT_VALUE",
+                                              "message": "요청한 값이 올바르지 않습니다.",
+                                              "errors": [
+                                                "sort: enum 값이 올바르지 않습니다."
                                               ]
                                             }
                                             """
                             )
                     )
 
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "요청한 API가 존재하지 않습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "존재하지 않는 URL 예시",
+                                    value = """
+                                            {
+                                              "code": 404,
+                                              "name": "NO_HANDLER_FOUND",
+                                              "message": "요청하신 API가 존재하지 않습니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "지원하지 않는 HTTP 메서드입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "잘못된 HTTP 메서드 예시",
+                                    value = """
+                                            {
+                                              "code": 405,
+                                              "name": "METHOD_NOT_ALLOWED",
+                                              "message": "지원하지 않는 HTTP 메서드입니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "name": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 오류가 발생했습니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     ResponseEntity<List<TodoResponseDto>> getAllTodo(@RequestParam SortType sort, @RequestParam LocalDate date);
@@ -173,9 +272,11 @@ public interface TodoApiSpecification {
                                     name = "Todo 수정 실패 예시",
                                     value = """
                                             {
-                                              "errorCode": "2",
-                                              "messages": [
-                                                "마감일은 과거이면 안됍니다."
+                                              "code": 400,
+                                              "name": "INVALID_INPUT_VALUE",
+                                              "message": "요청한 값이 올바르지 않습니다.",
+                                              "errors": [
+                                                "dueDate: 마감일은 과거이면 안됍니다."
                                               ]
                                             }
                                             """
@@ -192,10 +293,48 @@ public interface TodoApiSpecification {
                                     name = "Todo 없음 예시",
                                     value = """
                                             {
-                                              "errorCode": "1",
-                                              "messages": [
-                                                "Todo를 찾을 수 없습니다."
-                                              ]
+                                              "code": 404,
+                                              "name": "TODO_NOT_FOUND",
+                                              "message": "Todo를 찾을 수 없습니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "지원하지 않는 HTTP 메서드입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "잘못된 HTTP 메서드 예시",
+                                    value = """
+                                            {
+                                              "code": 405,
+                                              "name": "METHOD_NOT_ALLOWED",
+                                              "message": "지원하지 않는 HTTP 메서드입니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "name": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 오류가 발생했습니다.",
+                                              "errors": null
                                             }
                                             """
                             )
@@ -241,10 +380,69 @@ public interface TodoApiSpecification {
                                     name = "Todo 완료 여부 수정 실패 예시",
                                     value = """
                                             {
-                                              "errorCode": "1",
-                                              "messages": [
-                                                "Todo를 찾을 수 없습니다."
+                                              "code": 404,
+                                              "name": "TODO_NOT_FOUND",
+                                              "message": "Todo를 찾을 수 없습니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "입력값 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 400,
+                                              "name": "INVALID_INPUT_VALUE",
+                                              "message": "요청한 값이 올바르지 않습니다.",
+                                              "errors": [
+                                                "completed: true/false 값이 필요합니다."
                                               ]
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "지원하지 않는 HTTP 메서드입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "잘못된 HTTP 메서드 예시",
+                                    value = """
+                                            {
+                                              "code": 405,
+                                              "name": "METHOD_NOT_ALLOWED",
+                                              "message": "지원하지 않는 HTTP 메서드입니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "name": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 오류가 발생했습니다.",
+                                              "errors": null
                                             }
                                             """
                             )
@@ -272,10 +470,48 @@ public interface TodoApiSpecification {
                                     name = "Todo 삭제 실패 예시",
                                     value = """
                                             {
-                                              "errorCode": "1",
-                                              "messages": [
-                                                "Todo를 찾을 수 없습니다."
-                                              ]
+                                              "code": 404,
+                                              "name": "TODO_NOT_FOUND",
+                                              "message": "Todo를 찾을 수 없습니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "지원하지 않는 HTTP 메서드입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "잘못된 HTTP 메서드 예시",
+                                    value = """
+                                            {
+                                              "code": 405,
+                                              "name": "METHOD_NOT_ALLOWED",
+                                              "message": "지원하지 않는 HTTP 메서드입니다.",
+                                              "errors": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "서버 오류 예시",
+                                    value = """
+                                            {
+                                              "code": 500,
+                                              "name": "INTERNAL_SERVER_ERROR",
+                                              "message": "서버 오류가 발생했습니다.",
+                                              "errors": null
                                             }
                                             """
                             )
