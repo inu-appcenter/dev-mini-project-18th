@@ -1,6 +1,6 @@
 package com.siillvergun.todolist.todo.service;
 
-import com.siillvergun.todolist.global.exception.CustomError;
+import com.siillvergun.todolist.global.exception.CustomException;
 import com.siillvergun.todolist.global.exception.ErrorCode;
 import com.siillvergun.todolist.todo.SortType;
 import com.siillvergun.todolist.todo.dto.TodoCompletedUpdateRequestDto;
@@ -32,7 +32,7 @@ public class TodoService {
     public List<TodoResponseDto> getAllTodo(LocalDate date, SortType sortType) {
         Sort sort = switch (sortType) {
             case createdAt -> Sort.by(Sort.Direction.DESC, "createdAt");
-            case category -> Sort.by(Sort.Direction.ASC, "category");
+            case category -> Sort.by(Sort.Direction.DESC, "category");
         };
 
         List<Todo> todos = todoRepository.findAllByDueDate(date, sort); // 페이지네이션으로 리펙토링
@@ -41,7 +41,7 @@ public class TodoService {
 
     private Todo findTodoById(Long id) {
         return todoRepository.findById(id)
-                .orElseThrow(() -> new CustomError(ErrorCode.TODO_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
     }
 
     @Transactional
