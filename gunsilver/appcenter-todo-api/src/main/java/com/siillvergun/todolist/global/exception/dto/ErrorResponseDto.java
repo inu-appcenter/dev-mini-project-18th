@@ -4,6 +4,7 @@ import com.siillvergun.todolist.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,22 +12,33 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class ErrorResponseDto {
-    private String errorCode;
-    private List<String> messages;
+    private Integer code;
+    private String name;
+    private String message;
+    private List<String> errors;
 
-    /// 그냥 에러 코드에 있는 메시지를 받음(에러코드에 있는 기본적인 메시지)
-    public static ErrorResponseDto of(ErrorCode errorCode) {
-        return ErrorResponseDto.builder()
-                .errorCode(errorCode.getCode())
-                .messages(List.of(errorCode.getMessage()))
-                .build();
+    // 1. 에러 코드만 받아서 기본 메시지로 응답을 만들 때
+    public static ResponseEntity<ErrorResponseDto> toErrorResponseDto(ErrorCode errorCode) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.builder()
+                        .code(errorCode.getCode())
+                        .name(errorCode.name())
+                        .message(errorCode.getMessage())
+                        .errors(null)
+                        .build());
     }
 
-    /// DTO 검증 어노테이션의 메시지도 받을 수 있는 팩토리 메서드(DTO에 있는 구체적인 메시지)
-    public static ErrorResponseDto of(ErrorCode errorCode, List<String> customMessages) {
-        return ErrorResponseDto.builder()
-                .errorCode(errorCode.getCode())
-                .messages(customMessages) // DTO에서 넘어온 상세 메시지를 덮어씌움
-                .build();
+    // 2. 검증 실패(Validation)처럼 상세 에러 목록이나 커스텀 메시지가 필요할 때
+    public static ResponseEntity<ErrorResponseDto> toErrorResponseDto(ErrorCode errorCode, String message, List<String> errors) {
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(ErrorResponseDto.builder()
+                        .code(errorCode.getCode())
+                        .name(errorCode.name())
+                        .message(message)
+                        .errors(errors)
+                        .build()
+                );
     }
 }
