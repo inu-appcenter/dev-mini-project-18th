@@ -11,22 +11,28 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class ErrorResponseDto {
-    private String errorCode;
-    private List<String> messages;
+    private Integer code;
+    private String name;
+    private String message;
+    private List<String> errors;
 
-    /// 그냥 에러 코드에 있는 메시지를 받음(에러코드에 있는 기본적인 메시지)
     public static ErrorResponseDto of(ErrorCode errorCode) {
         return ErrorResponseDto.builder()
-                .errorCode(errorCode.getCode())
-                .messages(List.of(errorCode.getMessage()))
+                .code(errorCode.getCode())
+                .name(errorCode.name())
+                .message(errorCode.getMessage())
+                .errors(null)
                 .build();
     }
 
-    /// DTO 검증 어노테이션의 메시지도 받을 수 있는 팩토리 메서드(DTO에 있는 구체적인 메시지)
-    public static ErrorResponseDto of(ErrorCode errorCode, List<String> customMessages) {
+    // 기본 메시지를 그대로 쓸 수도 있고, dto검증 메시지를 덮어쓸 수도 있음
+    public static ErrorResponseDto of(ErrorCode errorCode, String message,
+                                      List<String> errors) {
         return ErrorResponseDto.builder()
-                .errorCode(errorCode.getCode())
-                .messages(customMessages) // DTO에서 넘어온 상세 메시지를 덮어씌움
+                .code(errorCode.getCode())
+                .name(errorCode.name())
+                .message(message)
+                .errors(errors)
                 .build();
     }
 }
