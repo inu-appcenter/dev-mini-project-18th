@@ -2,6 +2,7 @@ package com.siillvergun.todolist.todo.dto;
 
 import com.siillvergun.todolist.todo.entity.Category;
 import com.siillvergun.todolist.todo.entity.Todo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +15,28 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "할 일 응답 DTO")
 public class TodoResponseDto {
+
+    @Schema(description = "할 일 ID")
     private Long id;
+
+    @Schema(description = "내용")
     private String content;
+
+    @Schema(description = "마감일")
     private LocalDate dueDate;
+
+    @Schema(description = "카테고리")
     private Category category;
+
+    @Schema(description = "완료 여부")
     private boolean completed;
+
+    @Schema(description = "생성일")
     private LocalDateTime createdAt;
+
+    @Schema(description = "수정일")
     private LocalDateTime updatedAt;
 
     public static TodoResponseDto from(Todo todo) {
