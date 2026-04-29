@@ -16,16 +16,16 @@ import java.time.LocalDate;
 @Schema(description = "할 일 생성 요청")
 public class TodoRequestDto {
 
-    @Schema(description = "내용")
+    @Schema(description = "내용", example = "운동하기")
     @NotBlank(message = "내용은 필수 입니다")
     private String content;
 
-    @Schema(description = "마감일")
+    @Schema(description = "마감일", example = "2026-05-01")
     @NotNull
     @FutureOrPresent(message = "마감일은 과거이면 안됍니다.")
     private LocalDate dueDate;
 
-    @Schema(description = "카테고리")
+    @Schema(description = "카테고리", example = "IMPORTANT")
     @NotNull(message = "정해진 카테고리만 사용할 수 있습니다.")
     private Category category;
 

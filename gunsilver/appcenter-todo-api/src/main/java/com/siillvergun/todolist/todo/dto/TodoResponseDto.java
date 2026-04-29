@@ -18,25 +18,25 @@ import java.time.LocalDateTime;
 @Schema(description = "할 일 응답 DTO")
 public class TodoResponseDto {
 
-    @Schema(description = "할 일 ID")
+    @Schema(description = "할 일 ID", example = "1")
     private Long id;
 
-    @Schema(description = "내용")
+    @Schema(description = "내용", example = "운동하기")
     private String content;
 
-    @Schema(description = "마감일")
+    @Schema(description = "마감일", example = "2026-05-01")
     private LocalDate dueDate;
 
-    @Schema(description = "카테고리")
+    @Schema(description = "카테고리", example = "IMPORTANT")
     private Category category;
 
-    @Schema(description = "완료 여부")
+    @Schema(description = "완료 여부", example = "true")
     private boolean completed;
 
-    @Schema(description = "생성일")
+    @Schema(description = "생성일", example = "2026-04-29T12:00:00")
     private LocalDateTime createdAt;
 
-    @Schema(description = "수정일")
+    @Schema(description = "수정일", example = "2026-04-29T12:00:00")
     private LocalDateTime updatedAt;
 
     public static TodoResponseDto from(Todo todo) {

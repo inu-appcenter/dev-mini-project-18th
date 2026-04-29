@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Schema(description = "할 일 완료 여부 요청")
 public class TodoCompletedUpdateRequestDto {
-    @Schema(description = "완료 여부")
+    @Schema(description = "완료 여부", example = "true")
     private boolean completed;
 }

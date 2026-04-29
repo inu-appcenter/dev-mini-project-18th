@@ -1,5 +1,6 @@
 package com.siillvergun.todolist.todo.controller;
 
+import com.siillvergun.todolist.global.exception.dto.ErrorResponseDto;
 import com.siillvergun.todolist.todo.SortType;
 import com.siillvergun.todolist.todo.dto.TodoCompletedUpdateRequestDto;
 import com.siillvergun.todolist.todo.dto.TodoRequestDto;
@@ -8,6 +9,7 @@ import com.siillvergun.todolist.todo.dto.TodoUpdateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,12 +35,41 @@ public interface TodoApiSpecification {
                     description = "Todo 생성 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = TodoResponseDto.class)
+                            schema = @Schema(implementation = TodoResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 생성 성공 예시",
+                                    value = """
+                                            {
+                                              "id": 1,
+                                              "content": "운동하기",
+                                              "dueDate": "2026-05-01",
+                                              "category": "IMPORTANT",
+                                              "completed": false,
+                                              "createdAt": "2026-04-29T12:00:00",
+                                              "updatedAt": "2026-04-29T12:00:00"
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Todo 생성 실패"
+                    description = "잘못된 요청입니다",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 생성 실패 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "2",
+                                              "messages": [
+                                                "내용은 필수 입니다"
+                                              ]
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     ResponseEntity<TodoResponseDto> createTodo(@RequestBody @Valid TodoRequestDto todoRequestDto);
@@ -54,12 +85,53 @@ public interface TodoApiSpecification {
                     description = "모든 Todo 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = TodoResponseDto.class))
+                            array = @ArraySchema(schema = @Schema(implementation = TodoResponseDto.class)),
+                            examples = @ExampleObject(
+                                    name = "전체 Todo 조회 응답 예시",
+                                    value = """
+                                            [
+                                              {
+                                                "id": 1,
+                                                "content": "운동하기",
+                                                "dueDate": "2026-05-01",
+                                                "category": "IMPORTANT",
+                                                "completed": false,
+                                                "createdAt": "2026-04-29T12:00:00",
+                                                "updatedAt": "2026-04-29T12:00:00"
+                                              },
+                                              {
+                                                "id": 2,
+                                                "content": "장보기",
+                                                "dueDate": "2026-05-02",
+                                                "category": "IMPORTANT",
+                                                "completed": true,
+                                                "createdAt": "2026-04-29T13:00:00",
+                                                "updatedAt": "2026-04-29T13:30:00"
+                                              }
+                                            ]
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "모든 Todo 조회 실패"
+                    responseCode = "400",
+                    description = "잘못된 요청입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "전체 Todo 조회 실패 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "2",
+                                              "messages": [
+                                                "입력값이 올바르지 않습니다."
+                                              ]
+                                            }
+                                            """
+                            )
+                    )
+
             )
     })
     ResponseEntity<List<TodoResponseDto>> getAllTodo(@RequestParam SortType sort, @RequestParam LocalDate date);
@@ -74,12 +146,60 @@ public interface TodoApiSpecification {
                     description = "Todo 수정 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = TodoResponseDto.class)
+                            schema = @Schema(implementation = TodoResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 수정 성공 예시",
+                                    value = """
+                                            {
+                                              "id": 1,
+                                              "content": "장보기",
+                                              "dueDate": "2026-05-03",
+                                              "category": "IMPORTANT",
+                                              "completed": false,
+                                              "createdAt": "2026-04-29T12:00:00",
+                                              "updatedAt": "2026-04-29T14:00:00"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청입니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 수정 실패 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "2",
+                                              "messages": [
+                                                "마감일은 과거이면 안됍니다."
+                                              ]
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Todo 수정 실패"
+                    description = "Todo를 찾을 수 없습니다.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 없음 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "1",
+                                              "messages": [
+                                                "Todo를 찾을 수 없습니다."
+                                              ]
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     ResponseEntity<TodoResponseDto> updateTodo(@PathVariable Long id, @RequestBody @Valid TodoUpdateRequestDto todoUpdateRequestDto);
@@ -94,12 +214,41 @@ public interface TodoApiSpecification {
                     description = "Todo 완료 여부 수정 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = TodoResponseDto.class)
+                            schema = @Schema(implementation = TodoResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 완료 여부 수정 성공 예시",
+                                    value = """
+                                            {
+                                              "id": 1,
+                                              "content": "운동하기",
+                                              "dueDate": "2026-05-01",
+                                              "category": "IMPORTANT",
+                                              "completed": true,
+                                              "createdAt": "2026-04-29T12:00:00",
+                                              "updatedAt": "2026-04-29T15:00:00"
+                                            }
+                                            """
+                            )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Todo 완료 여부 수정 실패"
+                    description = "Todo를 찾을 수 없습니다",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 완료 여부 수정 실패 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "1",
+                                              "messages": [
+                                                "Todo를 찾을 수 없습니다."
+                                              ]
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     ResponseEntity<TodoResponseDto> updateCompleted(@PathVariable Long id, @RequestBody TodoCompletedUpdateRequestDto requestDto);
@@ -115,7 +264,22 @@ public interface TodoApiSpecification {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Todo 삭제 실패"
+                    description = "Todo를 찾을 수 없습니다",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "Todo 삭제 실패 예시",
+                                    value = """
+                                            {
+                                              "errorCode": "1",
+                                              "messages": [
+                                                "Todo를 찾을 수 없습니다."
+                                              ]
+                                            }
+                                            """
+                            )
+                    )
             )
     })
     ResponseEntity<Void> deleteTodo(@PathVariable Long id);
