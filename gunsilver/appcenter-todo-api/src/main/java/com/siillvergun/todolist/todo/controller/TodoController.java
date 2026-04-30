@@ -30,11 +30,11 @@ public class TodoController implements TodoApiSpecification {
     }
 
     @GetMapping
-    public ResponseEntity<List<TodoResponseDto>> getAllTodo(
+    public ResponseEntity<List<TodoResponseDto>> getOneDayTodo(
             @RequestParam SortType sort,
             @RequestParam LocalDate date
     ) {
-        List<TodoResponseDto> todoResponseDtoList = todoService.getAllTodo(date, sort);
+        List<TodoResponseDto> todoResponseDtoList = todoService.getOneDayTodo(date, sort);
         return ResponseEntity.ok(todoResponseDtoList);
     }
 

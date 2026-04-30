@@ -29,7 +29,7 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public List<TodoResponseDto> getAllTodo(LocalDate date, SortType sortType) {
+    public List<TodoResponseDto> getOneDayTodo(LocalDate date, SortType sortType) {
         Sort sort = switch (sortType) {
             case createdAt -> Sort.by(Sort.Direction.DESC, "createdAt");
             case category -> Sort.by(Sort.Direction.DESC, "category");
